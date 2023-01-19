@@ -5,14 +5,12 @@ import { Link, useNavigate } from "react-router-dom";
 import Obras from './Obras.js'
 import UploadArtwork from "./UploadArtwork";
 import { app } from '../firebase'
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore"
+import { getFirestore, doc, getDoc, getDocs, collection } from "firebase/firestore"
 import { GiPlainCircle } from "react-icons/gi"
 
 const firestore = getFirestore(app); 
 
 let fakeArray = [{title: "hola mundo"}];
-
-
 
 export function Home(){
 
@@ -26,7 +24,17 @@ export function Home(){
 
     const [arrayArtworks, setarrayArtworks] = useState(null);
 
+    const [totalArtworks, setTotalArtworks] = useState([]);
+
+    const [email, setEmail] = useState(null);
+
     const [showuploadButton, setshowuploadButton] =  useState(true);
+
+    const [iscurator, setisCurator] = useState([{name: "Tobias Ostrander", email: "tobiasostrander@gmail.com"}, {name: "Emmanuel Martínez", email: "emmanuel@neoncaron.com"}]);
+
+    const [curatorview, setcuratorView] = useState(false);
+
+    
 
     const searchOrCreateDocument = async(idDocumento)=>{
 
@@ -42,11 +50,81 @@ export function Home(){
     
     }
 
-    console.log("User", user);
+    const searchAllUsers = async()=>{
+  
+      //Crear referencia al documento
+      const docuRef = await getDocs(collection(firestore, "users"));
+    
+      let arrayAllArtworks = [];
+    
+      docuRef.forEach((doc)=>{
+    
+        let docInfo;
+    
+        docInfo = doc.data();
+    
+        /* console.log(doc.id, " => ", doc.data()); */
+    
+        if(!docInfo.artistname || !docInfo.artworks){
+    
+        arrayAllArtworks.push({artistname : "", artworks: [""]});
+        
+      } else {
+        
+         arrayAllArtworks.push({ artistname : docInfo.artistname, artworks: docInfo.artworks, email: docInfo.email });
+    
+        }
+      })
+    
+      return arrayAllArtworks;
+       
+    }
+
+    const getArray = async(userMail)=>{
+
+      if(userMail === iscurator[0].email || userMail === iscurator[1].email){
+  
+        setTotalArtworks(await searchAllUsers())
+
+      
+        setcuratorView(true);
+      
+        } else {
+      
+        console.log("Regular user")
+      }
+    }
+
+
+    const searchCurator = async()=>{
+  
+      //Crear referencia al documento
+      const docuRef = await getDocs(collection(firestore, "curator"));
+
+      let curators = [];
+       
+      docuRef.forEach((doc)=>{
+    
+        let docInfo;
+    
+        docInfo = doc.data();
+
+        curators.push(docInfo);
+
+      })
+    
+      setisCurator(curators);
+
+      return iscurator;
+
+    }
+  
+    
 
     useEffect(()=>{
 
       async function fetchFirebase(){
+    
 
         const userDocReference = await searchOrCreateDocument(user.email);
 
@@ -55,6 +133,8 @@ export function Home(){
         setartistName(userDocReference.artistname);       
 
         setarrayArtworks(userDocReference.artworks)
+
+        setEmail(userDocReference.email);
 
         if(userDocReference.artworks.length >= 3){
 
@@ -65,18 +145,31 @@ export function Home(){
           setshowuploadButton(true);
 
         }
+
+        await searchCurator()
+        .then(async(curator)=>{
+
+          console.log("Curators from useEffect", curator);
+
+          await getArray(userDocReference.email);
+        })
+
+        
+
         
 
       }
 
       fetchFirebase();      
 
+      console.log("User", user);
+
+      console.log("Artworks final <Home>", totalArtworks);
+
+      /* console.log("Artworks final", totalArtworks); */
+
     },[])
 
-    useEffect(()=>{
-      
-
-    },[showuploadButton])
     
     const handleLogout = async() =>{
         try{
@@ -90,24 +183,28 @@ export function Home(){
 
     }
 
+    
+
     if (loading) return <h1>Loading</h1>
 
-    
+    console.log("Artworks final", totalArtworks);
 
     return (
     
-    <div className="container flex pl-12 pt-12">
+    <div className="flex flex-row flex-nowrap pt-12">
 
-      <div id="side-bar"className="w-3/5 left-0 top-0 h-full p-8 flex flex-col justify-between">
-          <nav>
-          <div className="mb-5 w-2/4">
+{/* w-3/5 flex flex-col justify-between*/}
+
+      <div id="side-bar"className="flex flex-col justify-between h-full p-8 pl-16 basis-96">
+          <nav className="w-[18vw]">
+          <div className="pb-6 w-8/12">
               <Logo />
           </div>
 
           {artistName ? 
           <div className="mt-24">
-          <h1 class="text-4xl font-bold pb-8 ">Hola <br />{ artistName }</h1>
-          <h1 className="pb-2 pt-4 text-teal-400 text-lg tracking-[.25em]">DASHBOARD</h1>
+          <h1 class="text-5xl font-bold pb-8 ">Hola <br />{ artistName }</h1>
+          <h1 className="pb-2 pt-4 text-teal-400 text-xl tracking-[.25em]">DASHBOARD</h1>
           
           <hr style={{
             backgroundColor: "#33E0D0",
@@ -120,8 +217,8 @@ export function Home(){
           :
 
           <div className="mt-24">
-          <h1 class="text-4xl font-bold pb-8">Hola <br />{ user.email }</h1>
-          <h1 className="pb-2 pt-4 text-teal-400 text-lg tracking-[.25em]">DASHBOARD</h1>
+          <h1 class="text-5xl font-bold pb-8">Hola <br />{ user.email }</h1>
+          <h1 className="pb-2 pt-4 text-teal-400 text-xl tracking-[.25em]">DASHBOARD</h1>
           <hr style={{
             backgroundColor: "#33E0D0",
             height: 1,
@@ -135,19 +232,32 @@ export function Home(){
         
 
           <div className="pb-5 pt-5">
-            <h1 className="pb-2 text-teal-400 font-bold text-xl tracking-[.25em]">Obras subidas</h1>
-            {/* <h1 className="text-teal-400 hover:text-gray-500 text-lg">Subidas</h1> */}
-            { showuploadButton && 
+            <h1 className="pb-2 text-teal-400 font-bold text-2xl tracking-[.25em]">{ curatorview ? "Obras" : "Obras subidas"}</h1>
+            
+            { curatorview ?
+            <>
+            <h1 class="text-lg hover:text-gray-500 pb-2">Sin calificar</h1>
+            <h1 class="text-lg hover:text-gray-500 pb-2">Calificadas</h1>
+            </>
 
-                <Link to="/upload">
-                <h1 class="text-lg hover:text-gray-500 pb-2">Subir obra</h1>
-             </Link>
+            :
+
+            showuploadButton && <Link to="/upload"><h1 class="text-lg hover:text-gray-500 pb-2">Subir obra</h1></Link>
+
             }
           </div>
+          
 
+          { curatorview ?
+
+          null
+
+          :
+
+          <>
           <div className="mt-5">
           <Link to="/profile">
-             <h1 class="text-lg hover:text-gray-500 pb-2 tracking-[.25em]">PROFILE</h1>
+             <h1 class="text-xl hover:text-gray-500 pb-2 tracking-[.25em]">PROFILE</h1>
           </Link>
           </div>
 
@@ -158,6 +268,10 @@ export function Home(){
           }} />
 
           <GiPlainCircle className="mt-2 ml-auto"/>
+
+          </>
+
+          }
 
           </nav>
 
@@ -170,29 +284,33 @@ export function Home(){
       </div>
 
       
-      <main className="pt-32 w-screen h-full">
+      <main className="pt-32 w-[75vw] h-full">
           
 
         <div className="border-2 border-black rounded-2xl w-11/12 h-full p-8 mt-2 flex justify-items-center space-x-7">
 
 
 
-      <div className="flex justify-center">
-      <div className="px-4" style={{ maxWidth: '1600px' }}>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pb-20 pt-44 absolute bottom-0 h-full w-4/5 m-0">
+
+        
 
               {/* CARDS */}
-            { userDoc ? 
-            <Obras obras={ arrayArtworks } artistname={ artistName }/>
-            : null         
+
+
+            {
+            curatorview ?  
+            
+             ( userDoc ? <div className="flex flex-row flex-nowrap absolute bottom-0 h-full w-fit pb-20 pt-44 gap-x-4"><Obras obras={ totalArtworks } artistname={ artistName } email={ email } iscurator={ true } /> </div>: null )
+              
+            :
+
+              (userDoc ? <div className="grid grid-rows-1 grid-cols-3 auto-cols-min gap-6 h-full w-screen pb-20"><Obras obras={ arrayArtworks  } artistname={ artistName } email={ email } iscurator={ false }/> </div> : null )
+
+
             }
             
-              
 
 
-        </div>
-      </div>
-    </div>
 
 
       </div>

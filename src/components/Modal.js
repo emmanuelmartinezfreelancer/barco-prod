@@ -4,12 +4,13 @@ import { useAuth } from "../context/authContext"
 import { AiOutlineEye } from "react-icons/ai"
 import { HiExternalLink } from "react-icons/hi"
 import { app } from '../firebase'
-import { getFirestore, doc, getDoc, setDoc, updateDoc } from "firebase/firestore"
+import { getFirestore, doc, getDoc, updateDoc, getDocs, collection } from "firebase/firestore"
 import { Link, useNavigate } from "react-router-dom";
 
 
 const firestore = getFirestore(app); 
 const Modal = ({ artwork, artistName, imgurl }) => {
+  
   const [showModal, setShowModal] = useState(false);
 
   const { user } = useAuth();
@@ -44,7 +45,7 @@ const Modal = ({ artwork, artistName, imgurl }) => {
 
       setarrayArtworks(userDocReference.artworks)
 
-      console.log("Number of artworks", userDocReference.artworks.length);
+      /* console.log("Number of artworks", userDocReference.artworks.length); */
 
     }
 
@@ -53,7 +54,6 @@ const Modal = ({ artwork, artistName, imgurl }) => {
   },[])
 
   const deleteArtwork = async()=>{
-
 
     const artworksRef = doc(firestore, `users/${user.email}`);
 
@@ -79,7 +79,6 @@ const Modal = ({ artwork, artistName, imgurl }) => {
 
     window.location.reload(false);
 
-
   }
 
 
@@ -104,18 +103,12 @@ const Modal = ({ artwork, artistName, imgurl }) => {
             <div className="relative w-auto my-6 mx-auto max-w-md">
               <div className="border-2 border-black rounded-lg shadow-lg relative flex flex-col w-full bg-teal-400 outline-none focus:outline-none">
                 <div className="flex flex-col items-start justify-between p-5 border-b border-solid border-black rounded-t">
-{/*                 <button
-                    className="bg-transparent text-black float-right"
-                    onClick={() => setShowModal(false)}
-                    >
-                    <p className="text-black opacity-7 h-6 w-6 text-xl block border-2 border-black py-0 rounded-full">
-                      
-                    </p>
-                  </button> */}
+
                   <h3 className="text-3xl text-black font-semibold">{ artwork }</h3>
                   <h2 className="text-xl text-black">{ artistName }</h2>
 
                 </div>
+                
                 <div className="relative w-full p-6 flex-auto">
 
                 <div className="overflow-hidden"
