@@ -19,6 +19,8 @@ export function Profile() {
 
   const [arrayArtworks, setarrayArtworks] = useState(null);
 
+  let slashbirth = " / ";
+
   const searchOrCreateDocument = async(idDocumento)=>{
 
     //Crear referencia al documento
@@ -87,7 +89,7 @@ export function Profile() {
                 <p className="mt-2 pt-1 pb-2">{ userDoc.address }</p>
 
                 <h3 className="text-xl mt-2">Fecha de Nacimiento</h3>
-                <p className="mt-2 pt-1 pb-2">{ userDoc.birth }</p>
+                <p className="mt-2 pt-1 pb-2">{ userDoc.birth.day ? userDoc.birth.day + slashbirth + userDoc.birth.month + slashbirth + userDoc.birth.year : userDoc.birth }</p>
 
                 <h3 className="text-xl mt-2">Teléfono</h3>
                 <p className="mt-2 pt-1 pb-2">{ userDoc.phone }</p>

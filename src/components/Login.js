@@ -66,9 +66,13 @@ export function Login() {
 
       <div className="w-3/5 bg-[#40E0D0] p-5 h-screen bg-[url('/assets/backgroundHome.svg')]">
 
-      <div className="flex place-content-center h-full">
-          <LogoNuevo className="w-3/4" />
-      </div>
+     
+      <a href="https://barcobienal.com" className="flex place-content-center h-full">
+        
+        <LogoNuevo className="w-3/4"/>
+        
+      </a>
+
       
 
       </div>
