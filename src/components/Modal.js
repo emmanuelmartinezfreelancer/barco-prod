@@ -1,21 +1,28 @@
 import React, { useState, useEffect } from "react";
 import imgArt from "../img/M1.jpg"
 import { useAuth } from "../context/authContext"
-import { AiOutlineEye } from "react-icons/ai"
+import { AiOutlineEye, AiOutlineEdit } from "react-icons/ai"
 import { HiExternalLink } from "react-icons/hi"
+import { BsDownload } from "react-icons/bs"
+import { GrDocumentDownload } from "react-icons/gr"
+import { SlClose } from "react-icons/sl";
 import { app } from '../firebase'
 import { getFirestore, doc, getDoc, updateDoc, getDocs, collection } from "firebase/firestore"
 import { Link, useNavigate } from "react-router-dom";
 
 
 const firestore = getFirestore(app); 
-const Modal = ({ artwork, artistName, imgurl }) => {
+const Modal = ({ artwork, artistName, imgurl, description, artistcv, artistsemblance, projectdescription }) => {
   
   const [showModal, setShowModal] = useState(false);
 
   const { user } = useAuth();
 
   const [userDoc, setuserDoc] = useState(null);
+
+  const [editDescription, seteditDescription] = useState(false);
+
+  const [descriptionText, setdescriptionText] = useState("")
 
   const [arrayArtworks, setarrayArtworks] = useState(null);
 
@@ -44,6 +51,8 @@ const Modal = ({ artwork, artistName, imgurl }) => {
       setuserDoc(userDocReference);
 
       setarrayArtworks(userDocReference.artworks)
+
+      console.log("Description from <Modal/>", description);
 
       /* console.log("Number of artworks", userDocReference.artworks.length); */
 
@@ -82,6 +91,51 @@ const Modal = ({ artwork, artistName, imgurl }) => {
   }
 
 
+  const getDescription = async()=>{
+
+    const artworksRef = doc(firestore, `users/${user.email}`);
+
+    var val = artwork;
+
+    let newArrayArtworks = arrayArtworks;
+
+
+    newArrayArtworks.forEach(function(item, i){
+
+      console.log("Title " + item.title + " val " + val + " Artwork " + artwork)
+
+      if(item.title == val){
+
+        newArrayArtworks[i].description = descriptionText;
+
+        console.log("Artworks from <Modal/>", arrayArtworks);
+
+        console.log("Artworks new description from <Modal/>", newArrayArtworks);   
+
+       }
+
+      });
+
+     
+
+
+      console.log("array2Update", newArrayArtworks )
+      
+      await updateDoc(artworksRef, { artworks: newArrayArtworks })
+
+      window.location.reload(false);
+
+      
+
+/*     await updateDoc(artworksRef, { artworks: arrayArtworks })
+
+    console.log("Artwork borrado", index);
+
+    window.location.reload(false);
+ */
+  }
+
+
   return (
     <>
     <div className="flex flex-col">
@@ -100,15 +154,24 @@ const Modal = ({ artwork, artistName, imgurl }) => {
         <div className="">
           
           <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none w-full h-full bg-black bg-opacity-90">
-            <div className="relative w-auto my-6 mx-auto max-w-md">
+            <div className="relative w-auto my-6 mx-auto max-w-xl">
               <div className="border-2 border-black rounded-lg shadow-lg relative flex flex-col w-full bg-teal-400 outline-none focus:outline-none">
-                <div className="flex flex-col items-start justify-between p-5 border-b border-solid border-black rounded-t">
+                
+                <div className="flex flex-row">
+                <div className="flex flex-col items-start justify-between px-5 pt-5 pb-2 border-b border-solid border-black rounded-t">
 
                   <h3 className="text-3xl text-black font-semibold">{ artwork }</h3>
                   <h2 className="text-xl text-black">{ artistName }</h2>
 
                 </div>
                 
+                <SlClose className="text-3xl text-black ml-auto mt-7 mr-7"
+                onClick={() => { setShowModal(false); seteditDescription(false); }}
+                style={{cursor:'pointer'}}
+                />
+
+                </div>
+
                 <div className="relative w-full p-6 flex-auto">
 
                 <div className="overflow-hidden"
@@ -118,17 +181,102 @@ const Modal = ({ artwork, artistName, imgurl }) => {
                       borderRadius: "5rem 0",
                     }}
                 ></div>
+|               
+                { editDescription ? 
+                null
+                :
                 <a href={ imgurl } rel="noreferrer" target="_blank">
-                <HiExternalLink className="text-black pt-3 text-3xl" />
+                <HiExternalLink className="text-black text-xl" />
                 </a>
-                <h3 className="mt-3 text-black tracking-[.25em]">DESCRIPTION</h3>
-                <p className="text-black">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use.</p>
+                }
+
+{/*                 <div className="flex flex-row">
+
+                    <p className="text-black font-bold pt-3 text-sm">Artist's Docs:</p>
+
+                    <p className="text-black pt-3 pl-2 text-sm">Artwork</p>
+                    <a href={ imgurl } rel="noreferrer" target="_blank"><BsDownload className="text-black pt-3 text-3xl" /></a>
+
+                    <p className="text-black pt-3 pl-1 text-sm">| CV</p>
+                    <a href={ artistcv } rel="noreferrer" target="_blank"><GrDocumentDownload  className="text-black pt-3 text-3xl" /></a> 
+
+                    <p className="text-black pt-3 pl-1 text-sm">| Semblance</p>
+                    <a href={ artistsemblance } rel="noreferrer" target="_blank"><GrDocumentDownload  className="text-black pt-3 text-3xl" /></a> 
+
+                    <p className="text-black pt-3 pl-1 text-sm">| Project</p>
+                    <a href={ projectdescription } rel="noreferrer" target="_blank"><GrDocumentDownload  className="text-black pt-3 text-3xl" /></a>   
+
+                </div> */}
+
+                <h3 className="mt-3 mb-3 text-black tracking-[.25em]">DESCRIPTION</h3>
+
+                
+
+                  { editDescription ? 
+
+                    <div className="rounded-t-lg dark:bg-gray-800 w-[510px] ">
+                    <textarea
+                    name = "description-text"
+                    onChange={(e) => setdescriptionText(e.target.value)}
+                    className="px-5 py-2 h-[200px] w-full text-sm text-black bg-white border-0 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 border-transparent focus:border-transparent focus:ring-0"
+                    placeholder={ description }
+                    
+                     />
+                     </div>
+                    
+                    : 
+                    
+                    <p className="text-black w-[510px]">{ description }</p>
+                   
+                  }
+
+                
+                { editDescription ? 
+
+                null
+
+                :
+                
+                <>
+                <AiOutlineEdit className="text-3xl text-black absolute right-0 mr-8 mt-1"
+                style={{cursor:'pointer'}}
+                onClick={()=> seteditDescription(true)}
+                />
+
                 <h3 className="mt-6 text-black tracking-[.25em]">TYPE</h3>
                 <p className="text-black">IMG/JPG</p>
+                </>
+                
+
+                }
                 </div>
+
+
                 <div className="flex items-center justify-end p-6 border-t border-solid border-black rounded-b">
 
-                <button
+
+
+{/*                   <button
+                    className="text-white hover:text-gray-400 bg-black font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
+                    type="button"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Close
+                  </button> */}
+
+                  { editDescription ? 
+
+                    <button
+                      className="text-white hover:text-gray-400 bg-black font-bold uppercase px-6 py-2 rounded text-sm outline-none focus:outline-none mr-auto mb-1"
+                      type="button"
+                      onClick={()=> { getDescription(); seteditDescription(false) }}
+                    >
+                    Save changes
+                    </button> 
+
+                    :
+
+                    <button
                     className="text-red-700 hover:text-white bg-transparent font-bold pl-6 pb-4 py-2 text-sm outline-none focus:outline-none mr-4 mb-1"
                     type="button"
                     onClick={ deleteArtwork }
@@ -136,21 +284,10 @@ const Modal = ({ artwork, artistName, imgurl }) => {
                    Delete artwork
                   </button>
 
-                  <button
-                    className="text-white hover:text-gray-400 bg-black font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                  >
-                    Close
-                  </button>
-{/*                   <button
-                    className="border-2 border-black  text-teal-400 hover:text-white hover:bg-black font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                  >
-                    Save changes
-                  </button> */}
+                  }
                 </div>
+
+
               </div>
             </div>
           </div>

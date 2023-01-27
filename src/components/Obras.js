@@ -7,7 +7,7 @@ import { getFirestore, doc, getDocs, collection } from "firebase/firestore"
 
 const firestore = getFirestore(app); 
 
-export default function Obras({obras, artistname, email, iscurator}) {
+export default function Obras({obras, artistname, email, iscurator, cvURL, semblanceURL, projectURL}) {
 
 const [isShown, setIsShown] = useState(false);
 const [userMail, setuserMail] = useState(email);
@@ -124,7 +124,7 @@ useEffect(()=>{
   
                               <p className="text-white font-bold text-right pr-6 uppercase text-xl">{ artwork.title }</p>
                               <p className="text-white text-right uppercase pr-6 text-lg">{ artista.artistname }</p>
-                              <QualificationModal className="ml-auto" artwork ={ artwork.title }  artistName= { artista.artistname } imgurl= {artwork.imgurl } email= {artista.email} scoreFirebase={ artwork.score } onMouseEnter={() => setIsShown(false)} />
+                              <QualificationModal className="ml-auto" artwork ={ artwork.title }  description={ artwork.description } artistName= { artista.artistname } imgurl= {artwork.imgurl } email= {artista.email} scoreFirebase={ artwork.score } artistcv={ artista.cv } artistsemblance={ artista.semblance } projectdescription={ artista.project } onMouseEnter={() => setIsShown(false)} />
                                       <hr style={{
                                             backgroundColor: "white",
                                             height: 1,
@@ -189,7 +189,7 @@ useEffect(()=>{
   
                               <p className="text-white font-bold text-right pr-6 uppercase text-xl">{ obra.title }</p>
                               <p className="text-white text-right uppercase pr-6 text-lg">{ artistname }</p>
-                              <Modal className="ml-auto" artwork ={ obra.title }  artistName= { artistname } imgurl= { obra.imgurl } onMouseEnter={() => setIsShown(false)} />
+                              <Modal className="ml-auto" artwork ={ obra.title } description={ obra.description } artistName= { artistname } imgurl= { obra.imgurl } artistcv={ cvURL } artistsemblance={ semblanceURL } projectdescription={ projectURL } onMouseEnter={() => setIsShown(false)} />
                                       <hr style={{
                                             backgroundColor: "white",
                                             height: 1,

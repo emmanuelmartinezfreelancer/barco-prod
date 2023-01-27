@@ -7,6 +7,9 @@ import UploadArtwork from "./UploadArtwork";
 import { app } from '../firebase'
 import { getFirestore, doc, getDoc, getDocs, collection } from "firebase/firestore"
 import { GiPlainCircle } from "react-icons/gi"
+import { BsDownload } from "react-icons/bs"
+import { GrDocumentDownload } from "react-icons/gr"
+
 
 const firestore = getFirestore(app); 
 
@@ -20,7 +23,11 @@ export function Home(){
 
     const [artistName, setartistName] = useState(null);
 
-    const [artworkImage, setartworkImage] = useState(null);
+    const [cvurl, setcvUrl] = useState(null);
+    
+    const [semblanceurl, setsemblanceUrl] = useState(null);
+
+    const [projecturl, setprojectUrl] = useState(null);
 
     const [arrayArtworks, setarrayArtworks] = useState(null);
 
@@ -30,12 +37,11 @@ export function Home(){
 
     const [showuploadButton, setshowuploadButton] =  useState(true);
 
-    const [iscurator, setisCurator] = useState([{name: "Tobias Ostrander", email: "tobiasostrander@gmail.com"}, {name: "Emmanuel Martínez", email: "vel.freelancer@gmail.com"}]);
+    const [iscurator, setisCurator] = useState([{name: "Tobias Ostrander", email: "tobiasostrander@gmail.com"}, {name: "Emmanuel Martínez", email: "vela.freelancer@gmail.com"}, {name: "Oscar Ascencio", email:"oscarascencioc@hotmail.com"}]);
 
     const [curatorview, setcuratorView] = useState(false);
 
     
-
     const searchOrCreateDocument = async(idDocumento)=>{
 
       //Crear referencia al documento
@@ -71,7 +77,7 @@ export function Home(){
         
       } else {
         
-         arrayAllArtworks.push({ artistname : docInfo.artistname, artworks: docInfo.artworks, email: docInfo.email });
+         arrayAllArtworks.push({ artistname : docInfo.artistname, artworks: docInfo.artworks, email: docInfo.email, cv: docInfo.cvUrl, semblance: docInfo.semblanzaUrl, project: docInfo.projectUrl });
     
         }
       })
@@ -135,6 +141,12 @@ export function Home(){
         setarrayArtworks(userDocReference.artworks)
 
         setEmail(userDocReference.email);
+
+        setcvUrl(userDocReference.cvUrl);
+
+        setsemblanceUrl(userDocReference.semblanzaUrl)
+
+        setprojectUrl(userDocReference.projectUrl)
 
         if(userDocReference.artworks.length >= 3){
 
@@ -269,6 +281,25 @@ export function Home(){
 
           <GiPlainCircle className="mt-2 ml-auto"/>
 
+          
+                <div className="flex flex-col">
+
+                    <div className="flex flex-row">
+                    <p className="text-teal-400 pt-3 pl-1 text-sm tracking-[.25em] uppercase">CV</p>
+                    <a href={ cvurl } rel="noreferrer" target="_blank"><BsDownload  className="pl-1 pt-3 text-3xl" /></a> 
+                    </div>
+
+                    <div className="flex flex-row">
+                    <p className="text-teal-400  pt-3 pl-1 text-sm tracking-[.25em] uppercase">Semblanza</p>
+                    <a href={ semblanceurl } rel="noreferrer" target="_blank"><BsDownload  className="pl-1 pt-3 text-3xl" /></a> 
+                    </div>
+
+                    <div className="flex flex-row">
+                    <p className="text-teal-400 pt-3 pl-1 text-sm tracking-[.25em] uppercase">Projecto</p>
+                    <a href={ projecturl } rel="noreferrer" target="_blank"><BsDownload  className="pl-1 pt-3 text-3xl" /></a>   
+                    </div>
+                </div>
+
           </>
 
           }
@@ -304,7 +335,7 @@ export function Home(){
               
             :
 
-              (userDoc ? <div className="grid grid-rows-1 grid-cols-3 auto-cols-min gap-6 h-full w-screen pb-20"><Obras obras={ arrayArtworks  } artistname={ artistName } email={ email } iscurator={ false }/> </div> : null )
+              (userDoc ? <div className="grid grid-rows-1 grid-cols-3 auto-cols-min gap-6 h-full w-screen pb-20"><Obras obras={ arrayArtworks  } artistname={ artistName } email={ email } cvURL={cvurl} semblanceURL={ semblanceurl } projectURL={ projecturl } iscurator={ false }/> </div> : null )
 
 
             }

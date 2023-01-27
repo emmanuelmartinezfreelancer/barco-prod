@@ -273,6 +273,7 @@ const projectFileHandler = async(e)=>{
   }
   
   const handleSubmit = async (e) => {
+
     e.preventDefault();
     setError("");
 
@@ -564,8 +565,6 @@ const projectFileHandler = async(e)=>{
 
             <select id="disciplina" className="font-helveticaL text-sm border bg-black border-[#40E0D0] shadow appearance-none border rounded w-full py-2 px-3 text-teal-400 leading-tight focus:outline-none focus:shadow-outline w-full dark:border-[#40E0D0] dark:text-teal-400" onClick={ (e) => setUser({ ...user, discipline: e.target.value })}>
                 <option selected>Selecciona tu disciplina artística...</option>           
-                <option value="Cine">Cine</option>
-                <option value="Collage">Collage</option>
                 <option value="Dibujo">Dibujo</option>
                 <option value="Escultura">Escultura</option>
                 <option value="Fotografía">Fotografía</option>
@@ -574,7 +573,6 @@ const projectFileHandler = async(e)=>{
                 <option value="Interdisciplinarix">Interdisciplinarix</option>  
                 <option value="Pintura">Pintura</option>            
                 <option value="Videoarte">Videoarte</option>
-                <option value="3D">3D</option>
                 <option value="Otro">Otro</option>
             </select>
             

@@ -65,7 +65,8 @@ export function NewUploadArtwork() {
       duration: "",
       weight: "",
       value: 0,
-      imgurl: ""
+      imgurl: "",
+      description: "Para editar la descripción presiona el ícono del lápiz."
       });
   
   
@@ -158,7 +159,7 @@ export function NewUploadArtwork() {
           name = "artwork-name"
           type="text"
           onChange={(e) => setArtwork({ ...artwork, title: e.target.value })}
-          className="shadow appearance-none font-helveticaL text-sm bg-transparent border border-[#40E0D0] rounded w-full py-2 text-black leading-tight focus:outline-none focus:shadow-outline"
+          className="shadow appearance-none font-helveticaL text-sm bg-transparent border border-[#40E0D0] rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
           placeholder="Artwork Name"
         />
       </div>

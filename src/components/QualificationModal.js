@@ -3,6 +3,9 @@ import imgArt from "../img/M1.jpg"
 import { useAuth } from "../context/authContext"
 import { AiOutlineEye } from "react-icons/ai"
 import { HiExternalLink } from "react-icons/hi"
+import { BsDownload } from "react-icons/bs"
+import { GrDocumentDownload } from "react-icons/gr"
+
 import { Slider } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { app } from '../firebase'
@@ -25,7 +28,7 @@ const CustomSlider = styled(Slider)(({ theme }) => ({
 
 
 
-const QualificationModal = ({ artwork, artistName, imgurl, email, scoreFirebase }) => {
+const QualificationModal = ({ artwork, artistName, imgurl, description, email, scoreFirebase, artistcv, artistsemblance, projectdescription }) => {
 
   const [showModal, setShowModal] = useState(false);
 
@@ -52,7 +55,7 @@ const QualificationModal = ({ artwork, artistName, imgurl, email, scoreFirebase 
   
   }
 
-
+  console.log("Artist CV", artistcv )
 
   useEffect(()=>{
 
@@ -65,7 +68,7 @@ const QualificationModal = ({ artwork, artistName, imgurl, email, scoreFirebase 
       setarrayArtworks(userDocReference.artworks)
       
 
-      /* console.log("Number of artworks", userDocReference.artworks.length); */
+      console.log("Descriptions", description);
 
     }
 
@@ -109,6 +112,7 @@ const QualificationModal = ({ artwork, artistName, imgurl, email, scoreFirebase 
 
   }
 
+
   return (
     <>
     <div className="flex flex-col">
@@ -144,11 +148,31 @@ const QualificationModal = ({ artwork, artistName, imgurl, email, scoreFirebase 
                       borderRadius: "5rem 0",
                     }}
                 ></div>
-                <a href={ imgurl } rel="noreferrer" target="_blank">
-                <HiExternalLink className="text-black pt-3 text-3xl" />
-                </a>
+                <div className="flex flex-row">
+
+                     
+
+                    <p className="text-black font-bold pt-3 text-sm">Artist's Docs:</p>
+
+                    <p className="text-black pt-3 pl-2 text-sm">Artwork</p>
+                    <a href={ imgurl } rel="noreferrer" target="_blank"><BsDownload className="text-black pt-3 text-3xl" /></a>
+
+                    <p className="text-black pt-3 pl-1 text-sm">| CV</p>
+                    <a href={ artistcv } rel="noreferrer" target="_blank"><GrDocumentDownload  className="text-black pt-3 text-3xl" /></a> 
+
+                    <p className="text-black pt-3 pl-1 text-sm">| Semblance</p>
+                    <a href={ artistsemblance } rel="noreferrer" target="_blank"><GrDocumentDownload  className="text-black pt-3 text-3xl" /></a> 
+
+                    <p className="text-black pt-3 pl-1 text-sm">| Project</p>
+                    <a href={ projectdescription } rel="noreferrer" target="_blank"><GrDocumentDownload  className="text-black pt-3 text-3xl" /></a>   
+
+
+
+
+                </div>
+
                 <h3 className="mt-3 text-black tracking-[.25em]">DESCRIPTION</h3>
-                <p className="text-black">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use.</p>
+                <p className="text-black pt-3">{ description }</p>
                   <div className="flex flex-row">
                       <div className="flex flex-col">
                         <h3 className="mt-6 text-black tracking-[.25em]">TYPE</h3>
@@ -164,9 +188,8 @@ const QualificationModal = ({ artwork, artistName, imgurl, email, scoreFirebase 
 
                   </div>
 
-                  
-               
                 <CustomSlider onChange={ handleSlider } min={0.00} max={10.00} defaultValue={ score } aria-label="Default" valueLabelDisplay="auto" />
+
                 <h3 className="mt-6 text-xl text-black"><span className="font-bold">New score</span> { score }</h3>
                 
                 </div>
