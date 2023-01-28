@@ -132,6 +132,8 @@ export function Register() {
   const [monthbirth, setmonthBirth] = useState();
   const [yearbirth, setyearBirth] = useState();
 
+  const [ registerFinishedView, setregisterfinishedView ] = useState(false)
+
   const navigate = useNavigate();
 
   const createDocument = async(idDocumento)=>{
@@ -286,7 +288,8 @@ const projectFileHandler = async(e)=>{
       await signup(user.email, user.password);     
       const docFirebase = await createDocument(user.email);
       console.log("Doc user", docFirebase);
-      navigate("/");
+      setregisterfinishedView(true);
+      
     } catch (error) {
         if (error.code === "auth/internal-error"){
                 
@@ -306,9 +309,39 @@ const projectFileHandler = async(e)=>{
 
   };
 
+  const goToDashboard = () => {
+
+    setregisterfinishedView(false);
+    
+    navigate("/");
+  }
+
   return (
+    <>
+    {
+    
+    registerFinishedView &&
+      <>  
+      <div className="bg-black w-full h-full fixed text-teal-400 text-center">
+        
+        <p className="pt-72 text-2xl tracking-[.25em] uppercase">Gracias por tu registro</p>
+        <button onClick={()=>{ console.log("Go to dashboard"); goToDashboard(); }} className="bg-transparent border-teal-400 border-2 hover:bg-teal-300 hover:text-black text-teal-400 font-bold py-2 px-8 rounded font-helveticaL text-sm mt-4">
+          { ":)" }
+        </button>
+        
+        </div>
+
+     </>
+
+
+    }
+
+
+
     <div className="w-full max-w-xs m-auto text-black">
+
       {error && <Alert message={error} />}
+
 
       <form
         onSubmit={handleSubmit}
@@ -929,5 +962,6 @@ const projectFileHandler = async(e)=>{
         </Link>
       </p>
     </div>
+    </>
   );
 }

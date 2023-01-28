@@ -15,6 +15,20 @@ const firestore = getFirestore(app);
 
 let fakeArray = [{title: "hola mundo"}];
 
+
+function SearchBar(){
+
+  return(     
+    <div className="flex flex-row fixed w-full h-[30px] mt-16">
+       <button className="w-1/2 m-auto"></button>
+      <button className="rounded-xl border-teal-400 border-2 w-1/2 ml-24 pl-6 mr-8 text-right pr-8">Search by title or artist name...</button>
+      
+    </div>
+    )
+
+}
+
+
 export function Home(){
 
     const { user, logout, loading } = useAuth();
@@ -37,11 +51,11 @@ export function Home(){
 
     const [showuploadButton, setshowuploadButton] =  useState(true);
 
-    const [iscurator, setisCurator] = useState([{name: "Tobias Ostrander", email: "tobiasostrander@gmail.com"}, {name: "Emmanuel Martínez", email: "vela.freelancer@gmail.com"}, {name: "Oscar Ascencio", email:"oscarascencioc@hotmail.com"}]);
+    const [iscurator, setisCurator] = useState([{name: "Tobias Ostrander", email: "tobiasostrander@gmail.com"}, {name: "Emmanuel Martínez", email: "vel.freelancer@gmail.com"}, {name: "Oscar Ascencio", email:"oscarascencioc@hotmail.com"}]);
 
     const [curatorview, setcuratorView] = useState(false);
 
-    
+
     const searchOrCreateDocument = async(idDocumento)=>{
 
       //Crear referencia al documento
@@ -88,7 +102,7 @@ export function Home(){
 
     const getArray = async(userMail)=>{
 
-      if(userMail === iscurator[0].email || userMail === iscurator[1].email){
+      if(userMail === iscurator[0].email || userMail === iscurator[1].email || userMail === iscurator[2].email){
   
         setTotalArtworks(await searchAllUsers())
 
@@ -195,6 +209,8 @@ export function Home(){
 
     }
 
+
+
     
 
     if (loading) return <h1>Loading</h1>
@@ -202,10 +218,15 @@ export function Home(){
     console.log("Artworks final", totalArtworks);
 
     return (
+
+      <>
+
+      {curatorview &&
+      <SearchBar/>
+      }
     
     <div className="flex flex-row flex-nowrap pt-12">
 
-{/* w-3/5 flex flex-col justify-between*/}
 
       <div id="side-bar"className="flex flex-col justify-between h-full p-8 pl-16 basis-96">
           <nav className="w-[18vw]">
@@ -350,5 +371,8 @@ export function Home(){
 
 
     </div>
+
+    </>
+
     )
 }
