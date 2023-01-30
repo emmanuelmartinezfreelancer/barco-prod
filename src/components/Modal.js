@@ -12,7 +12,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 
 const firestore = getFirestore(app); 
-const Modal = ({ artwork, artistName, imgurl, description, artistcv, artistsemblance, projectdescription }) => {
+const Modal = ({ artwork, artistName, imgurl, description, dimensions, peso, artistcv, artistsemblance, projectdescription }) => {
   
   const [showModal, setShowModal] = useState(false);
 
@@ -243,8 +243,8 @@ const Modal = ({ artwork, artistName, imgurl, description, artistcv, artistsembl
                 onClick={()=> seteditDescription(true)}
                 />
 
-                <h3 className="mt-6 text-black tracking-[.25em]">TYPE</h3>
-                <p className="text-black">IMG/JPG</p>
+                <h3 className="mt-6 text-black tracking-[.25em]"><span className="font-bold">TYPE</span> IMG/JPG</h3>
+                <p className="text-black"><span className="font-bold">Dimensiones: </span>{ dimensions} <span className="font-bold">Peso</span> {peso}</p>
                 </>
                 
 

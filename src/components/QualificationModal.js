@@ -28,7 +28,7 @@ const CustomSlider = styled(Slider)(({ theme }) => ({
 
 
 
-const QualificationModal = ({ artwork, artistName, imgurl, description, email, scoreFirebase, artistcv, artistsemblance, projectdescription }) => {
+const QualificationModal = ({ artwork, artistName, imgurl, description, dimensions, peso, email, scoreFirebase, artistcv, artistsemblance, projectdescription }) => {
 
   const [showModal, setShowModal] = useState(false);
 
@@ -175,9 +175,9 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, email, s
                 <p className="text-black pt-3">{ description }</p>
                   <div className="flex flex-row">
                       <div className="flex flex-col">
-                        <h3 className="mt-6 text-black tracking-[.25em]">TYPE</h3>
+                      <h3 className="mt-6 text-black tracking-[.25em]"><span className="font-bold">TYPE</span> IMG/JPG</h3>
                   
-                        <p className="text-black">IMG/JPG</p>
+                        <p className="text-black"><span className="font-bold">Dimensions: </span>{ dimensions} <span className="font-bold">Weight</span> {peso}</p>
                       </div>
 
                       <div className="ml-auto flex flex-col">
