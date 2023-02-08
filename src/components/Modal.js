@@ -9,10 +9,14 @@ import { SlClose } from "react-icons/sl";
 import { app } from '../firebase'
 import { getFirestore, doc, getDoc, updateDoc, getDocs, collection } from "firebase/firestore"
 import { Link, useNavigate } from "react-router-dom";
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
+import axios from 'axios';
+
 
 
 const firestore = getFirestore(app); 
-const Modal = ({ artwork, artistName, imgurl, description, dimensions, peso, artistcv, artistsemblance, projectdescription }) => {
+const Modal = ({ artwork, artworkinfo, artistName, imgurl, description, dimensions, peso, artistex }) => {
   
   const [showModal, setShowModal] = useState(false);
 
@@ -26,8 +30,9 @@ const Modal = ({ artwork, artistName, imgurl, description, dimensions, peso, art
 
   const [arrayArtworks, setarrayArtworks] = useState(null);
 
-  const navigate = useNavigate();
+  const [ techArtwork, settechArtwork] = useState(false);
 
+  const navigate = useNavigate();
 
   const searchOrCreateDocument = async(idDocumento)=>{
   
@@ -61,6 +66,8 @@ const Modal = ({ artwork, artistName, imgurl, description, dimensions, peso, art
     fetchFirebase();      
 
   },[])
+
+  console.log("Exhibitions links", artistex)
 
   const deleteArtwork = async()=>{
 
@@ -136,6 +143,7 @@ const Modal = ({ artwork, artistName, imgurl, description, dimensions, peso, art
   }
 
 
+
   return (
     <>
     <div className="flex flex-col">
@@ -172,20 +180,51 @@ const Modal = ({ artwork, artistName, imgurl, description, dimensions, peso, art
 
                 </div>
 
+
+
                 <div className="relative w-full p-6 flex-auto">
 
                 <div className="overflow-hidden"
+                    onMouseOver={ ()=>{settechArtwork(true)} }
+                    onMouseLeave={()=>{ settechArtwork(false)} }
                     style={{ 
                       backgroundImage: `url("${ imgurl }")`,
                       height: "200px",
                       borderRadius: "5rem 0",
                     }}
-                ></div>
+                >
+
+                { techArtwork &&
+
+                <div className="h-full w-full z-[999] bg-black p-10 bg-opacity-70" >    
+                    
+                    <div className="flex flex-col">
+
+                      <p className="mx-auto my-auto"><span className="font-bold uppercase">Técnica</span> { artworkinfo.technique }</p>
+
+                      <p className="mx-auto my-auto"><span className="font-bold uppercase">Ediciones</span> { artworkinfo.edition }</p>
+
+                      <p className="mx-auto my-auto"><span className="font-bold uppercase">Año </span> { artworkinfo.year }</p>
+
+                      <p className="mx-auto my-auto"><span className="font-bold uppercase">Valor </span> { artworkinfo.value }</p>
+
+              
+                    </div>
+                
+                </div>
+
+                }                 
+
+
+                </div>
+
+
 |               
                 { editDescription ? 
                 null
                 :
-                <a href={ imgurl } rel="noreferrer" target="_blank">
+                <a href={ imgurl }
+                rel="noreferrer" target="_blank">
                 <HiExternalLink className="text-black text-xl" />
                 </a>
                 }
@@ -207,6 +246,7 @@ const Modal = ({ artwork, artistName, imgurl, description, dimensions, peso, art
                     <a href={ projectdescription } rel="noreferrer" target="_blank"><GrDocumentDownload  className="text-black pt-3 text-3xl" /></a>   
 
                 </div> */}
+                
 
                 <h3 className="mt-3 mb-3 text-black tracking-[.25em]">DESCRIPTION</h3>
 

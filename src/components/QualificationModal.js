@@ -12,6 +12,9 @@ import { app } from '../firebase'
 import { getFirestore, doc, getDoc, updateDoc, getDocs, collection } from "firebase/firestore"
 import { Link, useNavigate } from "react-router-dom";
 
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
+
 const firestore = getFirestore(app); 
 
 const colorBlack = "black";
@@ -28,7 +31,7 @@ const CustomSlider = styled(Slider)(({ theme }) => ({
 
 
 
-const QualificationModal = ({ artwork, artistName, imgurl, description, dimensions, peso, email, scoreFirebase, artistcv, artistsemblance, projectdescription }) => {
+const QualificationModal = ({ artwork, artistName, imgurl, description, dimensions, peso,  technique, edition, year, value, email, scoreFirebase, artistcv, artistsemblance, projectdescription, artistex }) => {
 
   const [showModal, setShowModal] = useState(false);
 
@@ -41,6 +44,8 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
   const navigate = useNavigate();
 
   const [score, setScore] = useState(scoreFirebase);
+
+  const [ techArtwork, settechArtwork] = useState(false);
 
   const searchOrCreateDocument = async(idDocumento)=>{
   
@@ -112,6 +117,39 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
 
   }
 
+  const handleZipDownload = async () => {
+
+    var zip = new JSZip();
+    
+    // block.packages is an array of items from the CMS
+    const remoteZips = artistex.map(async (pack) => {
+
+      let counter = 0;
+
+      console.log("Pack", pack)     
+
+      // pack is the URL for the .zip hosted on the CMS
+      let response =await fetch(pack)
+      .catch((err) => { 
+        console.log("ErrPromise", err)
+      }); 
+
+
+      const data = await response.blob()
+      
+      zip.file(`${counter++}.jpg`, data);
+
+      return data
+
+    })
+
+    Promise.all(remoteZips).then(() => {
+      zip.generateAsync({ type: "blob" }).then((content) => {
+        saveAs(content, `exhibitions.zip`);
+      })
+    })
+  }
+
 
   return (
     <>
@@ -142,12 +180,36 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
                 <div className="relative w-full p-6 flex-auto">
 
                 <div className="overflow-hidden"
+                    onMouseOver={ ()=>{settechArtwork(true)} }
+                    onMouseLeave={()=>{ settechArtwork(false)} }
                     style={{ 
                       backgroundImage: `url("${ imgurl }")`,
                       height: "200px",
                       borderRadius: "5rem 0",
                     }}
-                ></div>
+                >
+                { techArtwork &&
+
+                <div className="h-full w-full z-[999] bg-black p-10 bg-opacity-70" >    
+                    
+                    <div className="flex flex-col">
+
+                      <p className="mx-auto my-auto"><span className="font-bold uppercase">Técnica</span> { technique }</p>
+
+                      <p className="mx-auto my-auto"><span className="font-bold uppercase">Ediciones</span> { edition }</p>
+
+                      <p className="mx-auto my-auto"><span className="font-bold uppercase">Año </span> { year }</p>
+
+                      <p className="mx-auto my-auto"><span className="font-bold uppercase">Valor </span> { value }</p>
+                    
+                    </div>
+                
+                </div>
+
+                } 
+
+
+                </div>
                 <div className="flex flex-row">
 
                      
@@ -163,11 +225,11 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
                     <p className="text-black pt-3 pl-1 text-sm">| Semblance</p>
                     <a href={ artistsemblance } rel="noreferrer" target="_blank"><GrDocumentDownload  className="text-black pt-3 text-3xl" /></a> 
 
-                    <p className="text-black pt-3 pl-1 text-sm">| Project</p>
+                    <p className="text-black pl-1 pt-3 text-sm">| Project</p>
                     <a href={ projectdescription } rel="noreferrer" target="_blank"><GrDocumentDownload  className="text-black pt-3 text-3xl" /></a>   
-
-
-
+                    
+                    <p className="text-black pt-3 pl-1 text-sm">| Exhibitions</p>
+                    <GrDocumentDownload  onClick={handleZipDownload} className="text-black pt-3 text-3xl cursor-pointer" />
 
                 </div>
 

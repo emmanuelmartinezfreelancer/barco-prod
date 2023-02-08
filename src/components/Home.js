@@ -9,6 +9,8 @@ import { getFirestore, doc, getDoc, getDocs, collection } from "firebase/firesto
 import { GiPlainCircle } from "react-icons/gi"
 import { BsDownload } from "react-icons/bs"
 import { GrDocumentDownload } from "react-icons/gr"
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 
 
 const firestore = getFirestore(app); 
@@ -42,6 +44,8 @@ export function Home(){
     const [semblanceurl, setsemblanceUrl] = useState(null);
 
     const [projecturl, setprojectUrl] = useState(null);
+
+    const [artistex, setartistex] = useState(null);
 
     const [arrayArtworks, setarrayArtworks] = useState(null);
 
@@ -91,7 +95,7 @@ export function Home(){
         
       } else {
         
-         arrayAllArtworks.push({ artistname : docInfo.artistname, artworks: docInfo.artworks, email: docInfo.email, cv: docInfo.cvUrl, semblance: docInfo.semblanzaUrl, project: docInfo.projectUrl });
+         arrayAllArtworks.push({ artistname : docInfo.artistname, artworks: docInfo.artworks, email: docInfo.email, cv: docInfo.cvUrl, semblance: docInfo.semblanzaUrl, project: docInfo.projectUrl, exhibitions: docInfo.exposicionesUrls });
     
         }
       })
@@ -162,6 +166,8 @@ export function Home(){
 
         setprojectUrl(userDocReference.projectUrl)
 
+        setartistex(userDocReference.exposicionesUrls);
+
         if(userDocReference.artworks.length >= 3){
 
           setshowuploadButton(false);
@@ -209,9 +215,39 @@ export function Home(){
 
     }
 
+    const handleZipDownload = async () => {
 
+      var zip = new JSZip();
+      
+      // block.packages is an array of items from the CMS
+      const remoteZips = artistex.map(async (pack) => {
+  
+        let counter = 0;
+  
+        console.log("Pack", pack)     
+  
+        // pack is the URL for the .zip hosted on the CMS
+        let response =await fetch(pack)
+        .catch((err) => { 
+          console.log("ErrPromise", err)
+        }); 
+  
+  
+        const data = await response.blob()
+        
+        zip.file(`${counter++}.jpg`, data);
+  
+        return data
+  
+      })
+  
+      Promise.all(remoteZips).then(() => {
+        zip.generateAsync({ type: "blob" }).then((content) => {
+          saveAs(content, `exhibitions.zip`);
+        })
+      })
+    }
 
-    
 
     if (loading) return <h1>Loading</h1>
 
@@ -319,6 +355,11 @@ export function Home(){
                     <p className="text-teal-400 pt-3 pl-1 text-sm tracking-[.25em] uppercase">Projecto</p>
                     <a href={ projecturl } rel="noreferrer" target="_blank"><BsDownload  className="pl-1 pt-3 text-3xl" /></a>   
                     </div>
+
+                    <div className="flex flex-row">
+                    <p className="text-teal-400 pt-3 pl-1 text-sm tracking-[.25em] uppercase">Exhibiciones</p>
+                    <BsDownload  onClick={handleZipDownload} className="pl-1 pt-3 text-3xl cursor-pointer" />  
+                    </div>
                 </div>
 
           </>
@@ -356,7 +397,7 @@ export function Home(){
               
             :
 
-              (userDoc ? <div className="grid grid-rows-1 grid-cols-3 auto-cols-min gap-6 h-full w-screen pb-20"><Obras obras={ arrayArtworks  } artistname={ artistName } email={ email } cvURL={cvurl} semblanceURL={ semblanceurl } projectURL={ projecturl } iscurator={ false }/> </div> : null )
+              (userDoc ? <div className="grid grid-rows-1 grid-cols-3 auto-cols-min gap-6 h-full w-screen pb-20"><Obras obras={ arrayArtworks  } artistex= { artistex } artistname={ artistName } email={ email } cvURL={cvurl} semblanceURL={ semblanceurl } projectURL={ projecturl } iscurator={ false }/> </div> : null )
 
 
             }

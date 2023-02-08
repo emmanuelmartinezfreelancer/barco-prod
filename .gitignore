@@ -3,3 +3,5 @@ node_modules
 .env
 
 scripts.txt
+
+cors.json

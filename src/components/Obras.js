@@ -7,7 +7,7 @@ import { getFirestore, doc, getDocs, collection } from "firebase/firestore"
 
 const firestore = getFirestore(app); 
 
-export default function Obras({obras, artistname, email, iscurator, cvURL, semblanceURL, projectURL}) {
+export default function Obras({obras, artistname, email, iscurator, cvURL, semblanceURL, projectURL, artistex}) {
 
 const [isShown, setIsShown] = useState(false);
 const [userMail, setuserMail] = useState(email);
@@ -124,7 +124,25 @@ useEffect(()=>{
   
                               <p className="text-white font-bold text-right pr-6 uppercase text-xl">{ artwork.title }</p>
                               <p className="text-white text-right uppercase pr-6 text-lg">{ artista.artistname }</p>
-                              <QualificationModal className="ml-auto" artwork ={ artwork.title }  description={ artwork.description } dimensions={ artwork.widtheight} peso={ artwork.weight } artistName= { artista.artistname } imgurl= {artwork.imgurl } email= {artista.email} scoreFirebase={ artwork.score } artistcv={ artista.cv } artistsemblance={ artista.semblance } projectdescription={ artista.project } onMouseEnter={() => setIsShown(false)} />
+                              <QualificationModal className="ml-auto" 
+                                      artwork ={ artwork.title }
+                                      description={ artwork.description }
+                                      dimensions={ artwork.widtheight}
+                                      peso={ artwork.weight }
+                                      artistName= { artista.artistname }
+                                      imgurl= {artwork.imgurl }
+                                      email= {artista.email}
+                                      scoreFirebase={ artwork.score }
+                                      artistcv={ artista.cv }
+                                      artistsemblance={ artista.semblance }
+                                      projectdescription={ artista.project }
+                                      artistex= { artista.exhibitions }
+                                      technique = { artwork.technique }
+                                      edition = { artwork.edition }
+                                      year = { artwork.year }
+                                      value = { artwork.value }
+                                      
+                                      onMouseEnter={() => setIsShown(false)} />
                                       <hr style={{
                                             backgroundColor: "white",
                                             height: 1,
@@ -189,7 +207,7 @@ useEffect(()=>{
   
                               <p className="text-white font-bold text-right pr-6 uppercase text-xl">{ obra.title }</p>
                               <p className="text-white text-right uppercase pr-6 text-lg">{ artistname }</p>
-                              <Modal className="ml-auto" artwork ={ obra.title } description={ obra.description } artistName= { artistname } imgurl= { obra.imgurl } dimensions={ obra.widtheight} peso={ obra.weight } artistcv={ cvURL } artistsemblance={ semblanceURL } projectdescription={ projectURL } onMouseEnter={() => setIsShown(false)} />
+                              <Modal className="ml-auto" artwork ={ obra.title } artworkinfo={ obra } artistex= { artistex } description={ obra.description } artistName= { artistname } imgurl= { obra.imgurl } dimensions={ obra.widtheight} peso={ obra.weight } artistcv={ cvURL } artistsemblance={ semblanceURL } projectdescription={ projectURL } onMouseEnter={() => setIsShown(false)} />
                                       <hr style={{
                                             backgroundColor: "white",
                                             height: 1,
