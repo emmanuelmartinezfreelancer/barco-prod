@@ -111,7 +111,7 @@ useEffect(()=>{
                   return(
 
                       <>
-                      <div className="shadow overflow-hidden w-[410px] h-full"
+                      <div className="shadow overflow-hidden md:w-[50px] tablet:w-[410px] h-full bg-cover bg-center"
                       style={{ 
                         backgroundImage: `url("${ artwork.imgurl }")` 
                       }}

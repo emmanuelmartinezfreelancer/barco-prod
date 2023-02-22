@@ -59,17 +59,17 @@ export function Login() {
   };
 
   return (
-    <div className="w-full flex">
+    <div className="w-full flex sm:flex-col md:flex-row">
       
       {error && <Alert message={error} />}
 
 
-      <div className="w-3/5 bg-[#40E0D0] p-5 h-screen bg-[url('/assets/backgroundHome.svg')]">
+      <div className="sm:w-full md:w-3/5 bg-[#40E0D0] p-5 h-screen bg-[url('/assets/backgroundHome.svg')]">
 
      
       <a href="https://barcobienal.com" className="flex place-content-center h-full">
         
-        <LogoNuevo className="w-3/4"/>
+        <LogoNuevo className="sm:w-11/12 tablet:w-3/4 lg:w-8/12"/>
         
       </a>
 
@@ -78,14 +78,14 @@ export function Login() {
       </div>
           
 
-      <div className="bg-black w-2/5 grid h-screen place-items-center">
+      <div className="bg-black sm:w-full md:w-2/5 grid h-screen place-items-center">
       
       <form
         onSubmit={handleSubmit}
-        className="shadow-md rounded pt-6 pb-8 mb-4"
+        className="shadow-md rounded sm:pt-8 md:pt-6 pb-8 mb-4"
         >
-        <h1 className="text-center font-helveticaL text-4xl tracking-widest" >BIENVENIDO</h1>
-        <div className="pt-16 mb-8">
+        <h1 className="text-center font-helveticaL sm:text-2xl md:text-4xl tracking-widest" >BIENVENIDO</h1>
+        <div className="sm:pt-8 md:pt-16 mb-8">
           <label
             htmlFor="email"
             className="block text-teal-400 text-sm font-bold mb-2 font-helveticaL"
@@ -116,7 +116,7 @@ export function Login() {
           />
         </div>
 
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between sm:pt-3 md:pt-0">
           <button
             className="hover:text-gray-500 font-bold rounded focus:outline-none focus:shadow-outline font-helveticaL text-xs"
             type="submit"
@@ -134,7 +134,7 @@ export function Login() {
 
       <hr className="bg-grey my-8 h-px bg-[#40E0D0] border-0 dark:bg-[#40E0D0"/>
 
-      <p className="my-4 text-sm flex justify-between">
+      <p className="my-4 sm:hidden md:flex text-sm  justify-between">
         Don't have an account?
         <Link to="/register" className="text-teal-400 hover:text-gray-500">
           Register

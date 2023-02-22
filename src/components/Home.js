@@ -55,7 +55,7 @@ export function Home(){
 
     const [showuploadButton, setshowuploadButton] =  useState(true);
 
-    const [iscurator, setisCurator] = useState([{name: "Tobias Ostrander", email: "tobiasostrander@gmail.com"}, {name: "Emmanuel Martínez", email: "vela.freelancer@gmail.com"}, {name: "Oscar Ascencio", email:"oscarascencioc@hotmail.com"}]);
+    const [iscurator, setisCurator] = useState([{name: "Tobias Ostrander", email: "tobiasostrander@gmail.com"}, {name: "Emmanuel Martínez", email: "vel.freelancer@gmail.com"}, {name: "Oscar Ascencio", email:"oscarascencioc@hotmail.com"}]);
 
     const [curatorview, setcuratorView] = useState(false);
 
@@ -261,19 +261,19 @@ export function Home(){
       <SearchBar/>
       }
     
-    <div className="flex flex-row flex-nowrap pt-12">
+    <div className="flex sm:flex-col md:flex-row md:flex-nowrap tablet:pt-3 lg:pt-12 w-full">
 
 
-      <div id="side-bar"className="flex flex-col justify-between h-full p-8 pl-16 basis-96">
-          <nav className="w-[18vw]">
-          <div className="pb-6 w-8/12">
+      <div id="side-bar"className="flex flex-col sm:justify-center md:justify-between h-full md:p-8 md:pl-16 md:basis-96">
+          <nav className="sm:w-full md:w-[22vw] tablet:w-[18vw] lg:w-[18vw]">
+          <div className="sm:pb-6 md:pb-4 tablet:pb-1 sm:pt-10 md:pt-5 tablet:pt-4 sm:w-6/12 md:w-9/12 tablet:w-10/12 lg:w-9/12 sm:mx-auto md:ml-0">
               <Logo />
           </div>
 
           {artistName ? 
-          <div className="mt-24">
-          <h1 class="text-5xl font-bold pb-8 ">Hola <br />{ artistName }</h1>
-          <h1 className="pb-2 pt-4 text-teal-400 text-xl tracking-[.25em]">DASHBOARD</h1>
+          <div className="md:mt-20 lg:mt-24">
+          <h1 class="sm:w-full sm:text-2xl md:text-3xl tablet:text-4xl lg:text-5xl font-bold tablet:pb-2 lg:pb-8 text-center md:text-left">Hola <br className="sm:hidden md:block"/>{ artistName }</h1>
+          <h1 className="sm:pb-4 md:pb-2 pt-4 text-center md:text-left text-teal-400 sm:text-lg tablet:text-xl md:tracking-[.27em] tablet:tracking-[.25em]">DASHBOARD</h1>
           
           <hr style={{
             backgroundColor: "#33E0D0",
@@ -300,8 +300,8 @@ export function Home(){
           {/* NAV */} 
         
 
-          <div className="pb-5 pt-5">
-            <h1 className="pb-2 text-teal-400 font-bold text-2xl tracking-[.25em]">{ curatorview ? "Obras" : "Obras subidas"}</h1>
+          <div className="sm:hidden md:block pb-5 pt-5">
+            <h1 className="pb-2 text-teal-400 font-bold md:text-xl tablet:text-lg lg:text-2xl tracking-[.15em]">{ curatorview ? "Obras" : "Obras subidas"}</h1>
             
             { curatorview ?
             <>
@@ -324,9 +324,9 @@ export function Home(){
           :
 
           <>
-          <div className="mt-5">
+          <div className="tablet:mt-1 lg:mt-1">
           <Link to="/profile">
-             <h1 class="text-xl hover:text-gray-500 pb-2 tracking-[.25em]">PROFILE</h1>
+             <h1 class="text-center md:text-left text-xl hover:text-gray-500 sm:pb-5 md:pb-2 tracking-[.25em]">PROFILE</h1>
           </Link>
           </div>
 
@@ -341,24 +341,24 @@ export function Home(){
           
                 <div className="flex flex-col">
 
-                    <div className="flex flex-row">
-                    <p className="text-teal-400 pt-3 pl-1 text-sm tracking-[.25em] uppercase">CV</p>
-                    <a href={ cvurl } rel="noreferrer" target="_blank"><BsDownload  className="pl-1 pt-3 text-3xl" /></a> 
+                    <div className="flex flex-row justify-center md:justify-start">
+                    <p className="text-teal-400 pt-3 pl-1 sm:text-xl md:text-sm tracking-[.25em] uppercase">CV</p>
+                    <a href={ cvurl } rel="noreferrer" target="_blank"><BsDownload  className="pl-1 pt-3 sm:text-4xl md:text-3xl" /></a> 
                     </div>
 
-                    <div className="flex flex-row">
-                    <p className="text-teal-400  pt-3 pl-1 text-sm tracking-[.25em] uppercase">Semblanza</p>
-                    <a href={ semblanceurl } rel="noreferrer" target="_blank"><BsDownload  className="pl-1 pt-3 text-3xl" /></a> 
+                    <div className="flex flex-row justify-center md:justify-start">
+                    <p className="text-teal-400  pt-3 pl-1 sm:text-xl md:text-sm tracking-[.25em] uppercase">Semblanza</p>
+                    <a href={ semblanceurl } rel="noreferrer" target="_blank"><BsDownload  className="pl-1 pt-3 sm:text-4xl md:text-3xl" /></a> 
                     </div>
 
-                    <div className="flex flex-row">
-                    <p className="text-teal-400 pt-3 pl-1 text-sm tracking-[.25em] uppercase">Projecto</p>
-                    <a href={ projecturl } rel="noreferrer" target="_blank"><BsDownload  className="pl-1 pt-3 text-3xl" /></a>   
+                    <div className="flex flex-row justify-center md:justify-start">
+                    <p className="text-teal-400 pt-3 pl-1 sm:text-xl md:text-sm tracking-[.25em] uppercase">Proyecto</p>
+                    <a href={ projecturl } rel="noreferrer" target="_blank"><BsDownload  className="pl-1 pt-3 sm:text-4xl md:text-3xl" /></a>   
                     </div>
 
-                    <div className="flex flex-row">
-                    <p className="text-teal-400 pt-3 pl-1 text-sm tracking-[.25em] uppercase">Exhibiciones</p>
-                    <BsDownload  onClick={handleZipDownload} className="pl-1 pt-3 text-3xl cursor-pointer" />  
+                    <div className="flex flex-row justify-center md:justify-start">
+                    <p className="text-teal-400 pt-3 pl-1 sm:text-xl md:text-sm tracking-[.25em] uppercase">Exhibiciones</p>
+                    <BsDownload  onClick={handleZipDownload} className="pl-1 pt-3 sm:text-4xl md:text-3xl cursor-pointer" />  
                     </div>
                 </div>
 
@@ -368,7 +368,7 @@ export function Home(){
 
           </nav>
 
-          <div className="flex items-center gap-4 hover:text-gray-500">
+          <div className="flex justify-center md:justify-start sm:pt-6 md:pt-0 gap-4 hover:text-gray-500">
             <button onClick={ handleLogout }>
             Logout
             </button> 
@@ -377,10 +377,10 @@ export function Home(){
       </div>
 
       
-      <main className="pt-32 w-[75vw] h-full">
+      <main className="sm:pt-4 md:pt-32 sm:w-full md:w-[75vw] h-full">
           
 
-        <div className="border-2 border-black rounded-2xl w-11/12 h-full p-8 mt-2 flex justify-items-center space-x-7">
+        <div className="sm:w-full md:w-11/12 h-full md:pl-2 sm:px-4 md:px-0 md:py-8 md:pr-8 tablet:p-8 mt-2 flex justify-items-center space-x-7">
 
 
 
@@ -397,7 +397,7 @@ export function Home(){
               
             :
 
-              (userDoc ? <div className="grid grid-rows-1 grid-cols-3 auto-cols-min gap-6 h-full w-screen pb-20"><Obras obras={ arrayArtworks  } artistex= { artistex } artistname={ artistName } email={ email } cvURL={cvurl} semblanceURL={ semblanceurl } projectURL={ projecturl } iscurator={ false }/> </div> : null )
+              (userDoc ? <div className="grid sm:grid-rows-2 md:grid-rows-1 sm:grid-cols md:grid-cols-3 gap-6 sm:h-[1600px] md:h-full sm:w-full md:w-screen sm:pb-10 md:pb-10 lg:pb-20 px-auto"><Obras obras={ arrayArtworks  } artistex= { artistex } artistname={ artistName } email={ email } cvURL={cvurl} semblanceURL={ semblanceurl } projectURL={ projecturl } iscurator={ false }/> </div> : null )
 
 
             }

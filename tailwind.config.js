@@ -14,6 +14,12 @@ module.exports = {
       }
 
     },
+    screens:{
+      'sm': '360px',
+      'md': '768px',
+      'tablet': "1080px",
+      'lg': '1920px'
+    },
   },
   plugins: [],
 }
