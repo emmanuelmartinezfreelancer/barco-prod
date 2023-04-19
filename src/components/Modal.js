@@ -57,7 +57,7 @@ const Modal = ({ artwork, artworkinfo, artistName, imgurl, description, dimensio
 
       setarrayArtworks(userDocReference.artworks)
 
-      console.log("Description from <Modal/>", description);
+      //console.log("Description from <Modal/>", description);
 
       /* console.log("Number of artworks", userDocReference.artworks.length); */
 
@@ -67,7 +67,7 @@ const Modal = ({ artwork, artworkinfo, artistName, imgurl, description, dimensio
 
   },[])
 
-  console.log("Exhibitions links", artistex)
+  //console.log("Exhibitions links", artistex)
 
   const deleteArtwork = async()=>{
 
@@ -91,7 +91,7 @@ const Modal = ({ artwork, artworkinfo, artistName, imgurl, description, dimensio
 
     await updateDoc(artworksRef, { artworks: arrayArtworks })
 
-    console.log("Artwork borrado", index);
+    //console.log("Artwork borrado", index);
 
     window.location.reload(false);
 
@@ -109,7 +109,7 @@ const Modal = ({ artwork, artworkinfo, artistName, imgurl, description, dimensio
 
     newArrayArtworks.forEach(function(item, i){
 
-      console.log("Title " + item.title + " val " + val + " Artwork " + artwork)
+      //console.log("Title " + item.title + " val " + val + " Artwork " + artwork)
 
       if(item.title == val){
 
@@ -126,7 +126,7 @@ const Modal = ({ artwork, artworkinfo, artistName, imgurl, description, dimensio
      
 
 
-      console.log("array2Update", newArrayArtworks )
+      //console.log("array2Update", newArrayArtworks )
       
       await updateDoc(artworksRef, { artworks: newArrayArtworks })
 
@@ -152,7 +152,7 @@ const Modal = ({ artwork, artworkinfo, artistName, imgurl, description, dimensio
         type="button"
         onClick={() => setShowModal(true)}
       >
-        <AiOutlineEye className="mt-6" />
+        <AiOutlineEye className="mt-6 text-base tablet:text-2xl hd:text-2xl lg:text-3xl" />
 
       </button>
 

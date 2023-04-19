@@ -45,7 +45,7 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
 
   const [score, setScore] = useState(scoreFirebase);
 
-  const [ techArtwork, settechArtwork] = useState(false);
+  const [ techArtwork, settechArtwork] = useState(true);
 
   const searchOrCreateDocument = async(idDocumento)=>{
   
@@ -60,7 +60,7 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
   
   }
 
-  console.log("Artist CV", artistcv )
+  //console.log("Artist CV", artistcv )
 
   useEffect(()=>{
 
@@ -73,7 +73,7 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
       setarrayArtworks(userDocReference.artworks)
       
 
-      console.log("Descriptions", description);
+      //console.log("Descriptions", description);
 
     }
 
@@ -113,7 +113,7 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
   const handleSlider = (e)=>{
 
     setScore(e.target.value)
-    console.log("Value", score);
+    //console.log("Value", score);
 
   }
 
@@ -167,7 +167,8 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
 
       {showModal ? (
         <>
-          <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none w-full h-full bg-black bg-opacity-90">
+          <div className="flex flex-row w-full h-full bg-black bg-opacity-90 overflow-x-hidden overflow-y-auto fixed inset-0 z-50">
+          <div className="flex justify-center items-center  outline-none focus:outline-none w-1/2 ">
             <div className="relative w-auto my-6 mx-auto max-w-3xl">
               <div className="border-2 border-black rounded-lg shadow-lg relative flex flex-col w-full bg-teal-400 outline-none focus:outline-none">
                 <div className="flex flex-col items-start justify-between p-5 border-b border-solid border-black rounded-t ">
@@ -179,40 +180,24 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
 
                 <div className="relative w-full p-6 flex-auto">
 
-                <div className="overflow-hidden"
-                    onMouseOver={ ()=>{settechArtwork(true)} }
-                    onMouseLeave={()=>{ settechArtwork(false)} }
-                    style={{ 
-                      backgroundImage: `url("${ imgurl }")`,
-                      height: "200px",
-                      borderRadius: "5rem 0",
-                    }}
-                >
-                { techArtwork &&
 
-                <div className="h-full w-full z-[999] bg-black p-10 bg-opacity-70" >    
+                <div className="h-full w-full border-b border-solid border-black pb-4" >    
                     
-                    <div className="flex flex-col">
+                    <div className="flex flex-col text-black">
 
-                      <p className="mx-auto my-auto"><span className="font-bold uppercase">Técnica</span> { technique }</p>
+                      <p className=" my-auto"><span className="font-bold uppercase">Técnica</span> { technique }</p>
 
-                      <p className="mx-auto my-auto"><span className="font-bold uppercase">Ediciones</span> { edition }</p>
+                      <p className=" my-auto"><span className="font-bold uppercase">Ediciones</span> { edition }</p>
 
-                      <p className="mx-auto my-auto"><span className="font-bold uppercase">Año </span> { year }</p>
+                      <p className=" my-auto"><span className="font-bold uppercase">Año </span> { year }</p>
 
-                      <p className="mx-auto my-auto"><span className="font-bold uppercase">Valor </span> { value }</p>
+                      <p className=" my-auto"><span className="font-bold uppercase">Valor </span> { value }</p>
                     
                     </div>
                 
                 </div>
 
-                } 
-
-
-                </div>
                 <div className="flex flex-row">
-
-                     
 
                     <p className="text-black font-bold pt-3 text-sm">Artist's Docs:</p>
 
@@ -275,6 +260,14 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
                 </div>
               </div>
             </div>
+          </div>
+
+          <div className="w-1/2 h-full p-14">
+
+          <img src={`${imgurl}`} alt={`${imgurl}`} className="h-full w-full object-cover"/>
+            
+          </div>
+
           </div>
         </>
       ) : null}

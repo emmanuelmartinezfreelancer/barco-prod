@@ -1,0 +1,82 @@
+ //         obras.map((artista) =>{
+
+            return(
+            <>
+            {
+              artista.artworks.map((artwork)=>{
+
+                  return(
+
+                      <>
+                      <div className="shadow overflow-hidden md:w-[50px] tablet:w-[410px] h-full bg-cover bg-center"
+                      style={{ 
+                        backgroundImage: `url("${ artwork.imgurl }")` 
+                      }}
+                      onMouseEnter={() => setIsShown(true)}
+                      onMouseLeave={() => setIsShown(false)}
+                      >  { isShown &&             
+                          <div className="h-screen pt-72">
+                            
+                            <div className="z-10 flex flex-col pt-56 pl-4 rounded-l-[15rem] bg-[#26A7A3] h-[1000px] bg-opacity-50">
+  
+                              <p className="text-white font-bold text-right pr-6 uppercase text-xl">{ artwork.title }</p>
+                              <p className="text-white text-right uppercase pr-6 text-lg">{ artista.artistname }</p>
+                              <QualificationModal className="ml-auto" 
+                                      artwork ={ artwork.title }
+                                      description={ artwork.description }
+                                      dimensions={ artwork.widtheight}
+                                      peso={ artwork.weight }
+                                      artistName= { artista.artistname }
+                                      imgurl= {artwork.imgurl }
+                                      email= {artista.email}
+                                      scoreFirebase={ artwork.score }
+                                      artistcv={ artista.cv }
+                                      artistsemblance={ artista.semblance }
+                                      projectdescription={ artista.project }
+                                      artistex= { artista.exhibitions }
+                                      technique = { artwork.technique }
+                                      edition = { artwork.edition }
+                                      year = { artwork.year }
+                                      value = { artwork.value }
+                                      
+                                      onMouseEnter={() => setIsShown(false)} />
+                                      <hr style={{
+                                            backgroundColor: "white",
+                                            height: 1,
+                                            borderStyle: "none"
+                                      }} 
+                                      className="mr-6 ml-6 mt-1"
+                                      />
+                              <p className="ml-6 mt-1 text-white text-left pr-6 text-lg"><span className="font-bold">Score</span> { artwork.score }</p>
+                              </div>
+  {/*                         <div style={{
+                                    width: "475px",
+                                    height: "1000px",
+                                    borderRadius: "15rem 0",
+                                    backgroundColor: "#26A7A3",
+                          }}
+                          className="opacity-100 ml-auto mt-4"
+                          ></div> */}
+  
+                          </div>
+                          }
+                      </div>
+  
+                      
+  
+                      </>
+
+
+
+
+                  )
+
+              })
+
+
+            }
+            </>
+
+            )
+
+ //         }) 

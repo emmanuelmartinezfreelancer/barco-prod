@@ -7,3 +7,8 @@ scripts.txt
 cors.json
 
 dist/
+build/
+
+folioDesign/
+folioFirebaseTemplate/
+html-pages/

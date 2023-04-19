@@ -111,7 +111,8 @@ export function Register() {
     duration: "",
     weight: "",
     value: 0,
-    imgurl: ""
+    imgurl: "",
+    description: "Para editar la descripción presiona el ícono del lápiz."
     });
 
 
@@ -133,6 +134,8 @@ export function Register() {
   const [yearbirth, setyearBirth] = useState();
 
   const [ registerFinishedView, setregisterfinishedView ] = useState(false)
+
+  const [disabledFinalButton, setdisabledFinalButton] = useState(false);
 
   const navigate = useNavigate();
 
@@ -285,9 +288,11 @@ const projectFileHandler = async(e)=>{
     } else {
 
     try {
+      setdisabledFinalButton(true);
       await signup(user.email, user.password);     
       const docFirebase = await createDocument(user.email);
       console.log("Doc user", docFirebase);
+      await setFolioNumber(user.email)
       setregisterfinishedView(true);
       
     } catch (error) {
@@ -316,6 +321,69 @@ const projectFileHandler = async(e)=>{
     navigate("/");
   }
 
+  const searchFolioNumber = async()=>{
+
+    let folioNumber;
+    let folioUpdate;
+
+    const docuRef = doc(firestore, `folio/currentnumber/`)
+  
+    let docInfo;
+  
+    const docSnap = await getDoc(docuRef);
+  
+    docInfo = docSnap.data();
+
+    
+  
+    return docInfo.current;
+  
+  }
+
+
+
+  const setFolioNumber = async(usermail)=>{
+
+    //Crear referencia al documento
+
+    const docuRef = doc(firestore, `mail/${usermail}`)
+
+    const folioRef = doc(firestore, `folio/currentnumber/`)
+
+/*       const docuRef = doc(firestore, `mail/${email}`)
+*/       
+    let currentFolioNumber = await searchFolioNumber()
+  
+    console.log("Folio Number to send", currentFolioNumber);
+
+    const emailExample = {
+
+      to: [`${usermail}`],
+      message: {
+      subject: 'Tu número de registro',
+      text: '',
+      html: `
+      <p style="font-weight: bold; color: black">Muchas gracias por suscribirte a Barco Bienal, tu número de Folio es:</p>
+      <p style="font-size:36px; color:green">${currentFolioNumber}</p>      
+      `,
+      }
+
+    }
+
+  
+    await setDoc(docuRef, emailExample);
+
+    let folioUpdate = { current: currentFolioNumber + 1}
+
+    await setDoc(folioRef, folioUpdate);
+
+/*       const query = await getDoc(docuRef);
+  
+    const infoDocu = query.data();
+  
+    return infoDocu; */
+
+  }
   return (
     <>
     {
@@ -924,7 +992,9 @@ const projectFileHandler = async(e)=>{
                   />
                 </div>
                
-                  <button className="font-helveticaL text-sm text-teal-400 hover:text-gray-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                  <button 
+                  disabled={disabledFinalButton}
+                  className="font-helveticaL text-sm text-teal-400 hover:text-gray-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-gray-200">
                     Register
                   </button> 
               

@@ -5,9 +5,11 @@ import { Register } from "./components/Register";
 import { Home } from "./components/Home";
 import { Profile } from "./components/Profile"
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { ProtectedRouteAdmin } from "./components/ProtectedRouteAdmin";
 import { AuthProvider } from "./context/authContext";
 import { HomeJuez } from "./components/HomeJuez";
 import { NewUploadArtwork } from "./components/NewUploadArtwork"; 
+import { SendMail } from "./components/SendMail";
 
 function App() {
   return (
@@ -35,6 +37,12 @@ function App() {
               <ProtectedRoute>
                   <HomeJuez />
               </ProtectedRoute>
+
+          }/>
+          <Route path="/send-mail" element={
+              <ProtectedRouteAdmin>
+                  <SendMail />
+              </ProtectedRouteAdmin>
 
           }/>
         </Routes>
