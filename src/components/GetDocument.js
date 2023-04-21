@@ -29,27 +29,3 @@ export function GetDocument(collectionName, docId) {
 
   return docData;
 }
-
-
-/* 
-
-
-const getData = async () => {
-        
-  
-
-  let docInfo;
-
-  const docSnap = await getDoc(docuRef);
-
-  docInfo = docSnap.data();
-
-  let currentValue = docInfo.current;
-
-  return currentValue;
-
-}
-
-const currentNumber = getData();
-
-return currentNumber */

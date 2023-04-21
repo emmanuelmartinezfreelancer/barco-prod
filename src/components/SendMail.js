@@ -30,7 +30,7 @@ export function SendMail() {
 
   const [arrayMails, setarrayMails] = useState([])
 
-  const [fakeMails, setfakeMails] = useState(["vela.freelancer@gmail.com", "muymalastierras@gmail.com"])
+  const [fakeMails, setfakeMails] = useState(["vela.freelancer@gmail.com", "muymalastierras@gmail.com", "emax52@gmail.com", "cuevas.gris@gmail.com"])
 
   const [seetotalMails, setseetotalMails] = useState(false)
 
@@ -191,7 +191,7 @@ const createMail = async(email, customText, folio)=>{
             
     for(let i = 0; i < allUsers.length; i++){
 
-      finalUsers.push({ name: allUsers[i].artistname, email: allUsers[i].email, artworks: allUsers[i].artworks})
+      finalUsers.push({ name: allUsers[i].artistname, email: allUsers[i].email, artworks: allUsers[i].artworks, folio: allUsers[i].folio })
       usersMail.push(allUsers[i].email);
 
     }
@@ -279,7 +279,7 @@ const createMail = async(email, customText, folio)=>{
 
               <>
 
-              <h1 className="text-2xl ">{actualUser.name}</h1>
+              <h1 className="text-2xl ">{actualUser.name} <span className="font-light">Folio {actualUser.folio}</span></h1>
               <p className="">Número de obras inscritas <span className="font-bold text-xl">{actualUser.artworks.length}</span></p>
               <p className="pb-4">Correo <span className="font-bold text-xl">{actualUser.email}</span></p>
               <div className="flex flex-row w-full justify-between">
@@ -415,7 +415,7 @@ const createMail = async(email, customText, folio)=>{
                <button
                 className="w-4/12 py-3 pl-12 mt-2 border-2 border-teal-400 text-teal-400 bg-black hover:text-white font-bold text-lg rounded-md shadow hover:border-white outline-none focus:outline-none"
                 type="button"
-                onClick={(e)=>{ sendMailGrupal(fakeMails, mailgroupData);}}>
+                onClick={(e)=>{ console.log("Mail grupal")/* sendMailGrupal(arrayMails, mailgroupData); */}}>
                 <div className="flex flex-row pr-6">
                 {arePhones ? <p className="my-auto mx-auto">Send Messages</p> : <p className="my-auto mx-auto">Enviar</p> }
                 <IoSendSharp className="my-auto text-2xl mr-9"/>

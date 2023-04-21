@@ -356,16 +356,46 @@ const projectFileHandler = async(e)=>{
   
     console.log("Folio Number to send", currentFolioNumber);
 
+        const html = `
+      <html>
+      <head>
+          <meta charset="utf-8">
+          <meta http-equiv="X-UA-Compatible" content="IE=edge">
+          <title></title>
+          <meta name="description" content="">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+      </head>
+  
+      <body style="width: 550px; padding: 0; margin: 0; overflow: hidden; background-color: #fff;">
+  
+          <div id="folioMain" style="width: 550px; background-color: #000000; margin: 0 auto; height: fit-content; display: flex; flex-direction: column; color: rgb(45 212 191); padding: 30px;">
+                  
+                  <h1 style="font-size: x-large; font-family: sans-serif; font-weight: lighter; text-transform: uppercase; z-index: 1; color: black; padding-top: 50px;">¡HOLA!</h1>
+                  <p style="margin:0; font-family: sans-serif; font-weight: bold; font-size: xx-large; z-index: 1; color: black">Gracias por inscribirte<br>
+                     te compartimos tu<br>
+                     número de folio
+                  </p>
+                  <h3 style="padding-top: 25px; margin:0; font-family: sans-serif; text-transform: uppercase; font-weight: lighter;">FOLIO</h3>
+                  <p style="margin: 0; padding-bottom: 10px; font-family: sans-serif; text-transform: uppercase; font-weight: bold; font-size: xx-large; padding-bottom: 60px;">BA${currentFolioNumber}2023</p>
+                  <p style="font-family: sans-serif; font-weight: 600;">Solo te falta un último paso, verificar que tengas todas las descripciones de tus obras así como la imagen cargando correctamente, solo tienes que entrar a tu perfil y revisarlo.</p>
+  
+                  <div style="position: relative; width: 100%; height: 100%;">
+                  <div style="border-radius: 9999px; width: 350px; height: 350px;  border: 2px solid rgb(45 212 191); position: absolute; bottom:0; right:0; overflow: hidden; z-index: 1;"></div>
+              </div>
+          </div>
+  
+          <script src="" async defer></script>
+      </body>
+  </html>
+    `; 
+
     const emailExample = {
 
       to: [`${usermail}`],
       message: {
       subject: 'Tu número de registro',
       text: '',
-      html: `
-      <p style="font-weight: bold; color: black">Muchas gracias por suscribirte a Barco Bienal, tu número de Folio es:</p>
-      <p style="font-size:36px; color:green">${currentFolioNumber}</p>      
-      `,
+      html: html
       }
 
     }
