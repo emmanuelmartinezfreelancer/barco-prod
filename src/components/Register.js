@@ -128,6 +128,7 @@ export function Register() {
   const [projectReady, setProjectReady] = useState(false);
   const [comprobantesReady, setComprobanteReady] = useState(false);
   const [showRegisterButton, setRegisterButton] = useState(false);
+  const [folioNumber, setfolioNumber] = useState("");
   
   const [daybirth, setdayBirth] = useState();
   const [monthbirth, setmonthBirth] = useState();
@@ -139,13 +140,34 @@ export function Register() {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+
+    let currentFolioNumber
+
+    const getFolio = async () => {
+
+      currentFolioNumber = await searchFolioNumber()
+
+      setfolioNumber(`BA${currentFolioNumber}2023`)
+
+    }
+
+    getFolio();
+
+    return () => {
+
+      console.log("Folio in useEffect", folioNumber);
+    }
+      
+    },[])
+
   const createDocument = async(idDocumento)=>{
 
 
     //Crear referencia al documento
     const docuRef = doc(firestore, `users/${idDocumento}`)
     
-    let finalUser = {...user, password: "*******", cvUrl: URLCV, semblanzaUrl: URLSemblanza, projectUrl: URLProject};
+    let finalUser = {...user, password: "*******", cvUrl: URLCV, semblanzaUrl: URLSemblanza, projectUrl: URLProject, folio: folioNumber};
     let finalArtwork = {...artwork, imgurl: URLArtwork};
 
     finalUser.artworks.push(finalArtwork);
@@ -288,8 +310,9 @@ const projectFileHandler = async(e)=>{
     } else {
 
     try {
+      
       setdisabledFinalButton(true);
-      await signup(user.email, user.password);     
+      await signup(user.email, user.password); 
       const docFirebase = await createDocument(user.email);
       console.log("Doc user", docFirebase);
       await setFolioNumber(user.email)
@@ -355,6 +378,7 @@ const projectFileHandler = async(e)=>{
     let currentFolioNumber = await searchFolioNumber()
   
     console.log("Folio Number to send", currentFolioNumber);
+
 
         const html = `
       <html>

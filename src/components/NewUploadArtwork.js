@@ -54,6 +54,8 @@ export function NewUploadArtwork() {
   
     const [limitfileHander, setlimifileHandler] = useState(false);
 
+    const [disableButton, setdisableButton] = useState(false);
+
     const navigate = useNavigate();
   
     const [artwork, setArtwork] = useState({
@@ -101,15 +103,20 @@ export function NewUploadArtwork() {
   
       const imgFileHandler = async(e)=>{
   
+
+        setdisableButton(true);
+
         const localFile = e.target.files[0];
     
-        const fileRef = ref(storage, `artworks/${new Date()}_${localFile.name}`)
+        const fileRef = ref(storage, `artworks/${user.email}${localFile.name}`)
     
         await uploadBytes(fileRef, localFile);
     
         URLArtwork = await getDownloadURL(fileRef);
   
         setArtwork({...artwork, imgurl : URLArtwork})
+
+        setdisableButton(false);
     
         console.log("URL New Thumbnail", URLArtwork);
   
@@ -118,10 +125,12 @@ export function NewUploadArtwork() {
   
      const handleUpload = async()=>{
   
-  
+        setdisableButton(true);
         const artworksRef = doc(firestore, `users/${user.email}`)
       
         await updateDoc(artworksRef, { artworks: [...userDoc.artworks, artwork]})
+
+        setdisableButton(false);
     
         console.log("Doc actualizado");
   
@@ -330,7 +339,7 @@ export function NewUploadArtwork() {
             </button>
             </Link>
             <button
-              className="border-2 border-black text-black hover:text-white hover:bg-black font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
+              className={`font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ${disableButton ? "cursor-not-allowed bg-gray-200 text-gray-600" : "border-2 border-black text-black hover:text-white hover:bg-black"}`}
               type="button"
               onClick={ handleUpload }
             >

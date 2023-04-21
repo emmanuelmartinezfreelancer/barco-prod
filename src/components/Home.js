@@ -48,6 +48,8 @@ export function Home(){
     const [artistName, setartistName] = useState(null);
 
     const [cvurl, setcvUrl] = useState(null);
+
+    const [folio, setfolio] = useState(null);
     
     const [semblanceurl, setsemblanceUrl] = useState(null);
 
@@ -108,6 +110,8 @@ export function Home(){
       const query = await getDoc(docuRef);
     
       const infoDocu = query.data();
+
+      console.log("infoDocu", infoDocu)
     
       return infoDocu;
   
@@ -135,7 +139,7 @@ export function Home(){
         
       } else {
         
-         arrayAllArtworks.push({ artistname : docInfo.artistname, artworks: docInfo.artworks, email: docInfo.email, cv: docInfo.cvUrl, semblance: docInfo.semblanzaUrl, project: docInfo.projectUrl, exhibitions: docInfo.exposicionesUrls, address: docInfo.address });
+         arrayAllArtworks.push({ artistname : docInfo.artistname, artworks: docInfo.artworks, email: docInfo.email, cv: docInfo.cvUrl, semblance: docInfo.semblanzaUrl, project: docInfo.projectUrl, exhibitions: docInfo.exposicionesUrls, address: docInfo.address, folio: docInfo.folio });
     
         }
       })
@@ -354,6 +358,8 @@ export function Home(){
         setprojectUrl(userDocReference.projectUrl)
 
         setartistex(userDocReference.exposicionesUrls);
+        
+        setfolio(userDocReference.folio)
 
         let artworksDescriptions = await checkDescriptions(userDocReference.artworks)
 
@@ -523,7 +529,9 @@ export function Home(){
           {artistName ? 
           <div className="md:mt-20 lg:mt-24">
           <h1 class="sm:w-full sm:text-2xl md:text-3xl tablet:text-4xl lg:text-5xl font-bold tablet:pb-2 lg:pb-8 text-center md:text-left">Hola <br className="sm:hidden md:block"/>{ artistName }</h1>
+          {folio ? <p className="text-xl text-center md:text-left sm:pb-4 md:pb-2" >Folio <span className="font-bold">{ folio }</span></p> : null }
           <h1 className="sm:pb-4 md:pb-2 pt-4 text-center md:text-left text-teal-400 sm:text-lg tablet:text-xl md:tracking-[.27em] tablet:tracking-[.25em]">DASHBOARD</h1>
+
           
           <hr style={{
             backgroundColor: "#33E0D0",
@@ -537,6 +545,7 @@ export function Home(){
 
           <div className="mt-24">
           <h1 class="text-5xl font-bold pb-8">Hola <br />{ user.email }</h1>
+          {folio ? <p className="text-xl text-center md:text-left sm:pb-4 md:pb-2" >Folio <span className="font-bold">{ folio }</span></p> : null }
           <h1 className="pb-2 pt-4 text-teal-400 text-xl tracking-[.25em]">DASHBOARD</h1>
           <hr style={{
             backgroundColor: "#33E0D0",

@@ -157,7 +157,7 @@ else if(sliderorsearch === "slider") {
                         backgroundImage: `url("${ obra.imgurl }")` 
                       }}
                       onMouseEnter={() => setIsShown(true)}
-                      onMouseLeave={() => setIsShown(true)}
+                      onMouseLeave={() => setIsShown(false)}
                       >  { isShown &&             
                           <div className="h-fit pt-72 hhd:pt-48 hmd:pt-36 hsm:pt-28">
                             {/*  */}
