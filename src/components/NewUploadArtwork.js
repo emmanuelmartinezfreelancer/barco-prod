@@ -325,7 +325,7 @@ export function NewUploadArtwork() {
               type="file"
               onChange={ imgFileHandler }
               className="shadow appearance-none text-sm bg-transparent border border-[#40E0D0] rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline"
-              accept="image/jpeg"
+              accept="image/jpeg, video/mpeg, video/mpg, video/wmv, video/avi, video/mp4"
             />
 
             <div className="flex items-center justify-end pt-6 border-t border-solid border-black rounded-b">

@@ -96,8 +96,8 @@ export function Profile() {
 
                 <h3 className="text-xl mt-2">Disciplina</h3>
                 <p className="mt-2 pt-1 pb-2">{ userDoc.discipline }</p>
-                <h3 className="text-xl mt-2">CV</h3>
-                <a href={userDoc.cvUrl}><p className="mt-2 pt-1 pb-2">Click para descargar</p></a>
+{/*                 <h3 className="text-xl mt-2">CV</h3>
+                <a href={userDoc.cvUrl}><p className="mt-2 pt-1 pb-2">Click para descargar</p></a> */}
                 </div>
 
                 </>

@@ -16,7 +16,7 @@ import axios from 'axios';
 
 
 const firestore = getFirestore(app); 
-const Modal = ({ artwork, artworkinfo, artistName, imgurl, description, dimensions, peso, artistex }) => {
+const Modal = ({ artwork, artworkinfo, artistName, imgurl, description, dimensions, peso, artistex, contenttype }) => {
   
   const [showModal, setShowModal] = useState(false);
 
@@ -183,40 +183,79 @@ const Modal = ({ artwork, artworkinfo, artistName, imgurl, description, dimensio
 
 
                 <div className="relative w-full p-6 flex-auto">
-
-                <div className="overflow-hidden"
-                    onMouseOver={ ()=>{settechArtwork(true)} }
-                    onMouseLeave={()=>{ settechArtwork(false)} }
-                    style={{ 
-                      backgroundImage: `url("${ imgurl }")`,
-                      height: "200px",
-                      borderRadius: "5rem 0",
-                    }}
-                >
-
-                { techArtwork &&
-
-                <div className="h-full w-full z-[999] bg-black p-10 bg-opacity-70" >    
-                    
-                    <div className="flex flex-col">
-
-                      <p className="mx-auto my-auto"><span className="font-bold uppercase">Técnica</span> { artworkinfo.technique }</p>
-
-                      <p className="mx-auto my-auto"><span className="font-bold uppercase">Ediciones</span> { artworkinfo.edition }</p>
-
-                      <p className="mx-auto my-auto"><span className="font-bold uppercase">Año </span> { artworkinfo.year }</p>
-
-                      <p className="mx-auto my-auto"><span className="font-bold uppercase">Valor </span> { artworkinfo.value }</p>
-
-              
-                    </div>
                 
-                </div>
+                {
+                  contenttype === "image" &&
 
-                }                 
+                  <div className="overflow-hidden"
+                  onMouseOver={ ()=>{settechArtwork(true)} }
+                  onMouseLeave={()=>{ settechArtwork(false)} }
+                  style={{ 
+                    backgroundImage: `url("${ imgurl }")`,
+                    height: "200px",
+                    borderRadius: "5rem 0",
+                  }}
+              >
+
+              { techArtwork &&
+
+              <div className="h-full w-full z-[999] bg-black p-10 bg-opacity-70" >    
+                  
+                  <div className="flex flex-col">
+
+                    <p className="mx-auto my-auto"><span className="font-bold uppercase">Técnica</span> { artworkinfo.technique }</p>
+
+                    <p className="mx-auto my-auto"><span className="font-bold uppercase">Ediciones</span> { artworkinfo.edition }</p>
+
+                    <p className="mx-auto my-auto"><span className="font-bold uppercase">Año </span> { artworkinfo.year }</p>
+
+                    <p className="mx-auto my-auto"><span className="font-bold uppercase">Valor </span> { artworkinfo.value }</p>
+
+            
+                  </div>
+              
+              </div>
+
+              }                 
 
 
-                </div>
+                  </div>
+
+                }
+
+                {
+
+                  contenttype === "video" &&
+                  <>
+                  <div className="overflow-hidden"
+                  onMouseOver={ ()=>{settechArtwork(true)} }
+                  onMouseLeave={()=>{ settechArtwork(false)} }
+                  style={{ 
+                    height: "200px",
+                    borderRadius: "5rem 0",
+                  }}
+              >
+              <div className="relative">
+                  <video className="absolute" autoPlay loop muted src={imgurl} />
+              </div>
+
+              </div>
+
+              <div className="h-full w-full text-black" >    
+                  
+                  <div className="flex flex-col pt-4">
+
+                    <p className=""><span className="font-bold uppercase">Técnica</span> { artworkinfo.technique }</p>
+                    <p className=""><span className="font-bold uppercase">Año </span> { artworkinfo.year }</p>
+
+
+            
+                  </div>
+              
+              </div>
+              </>
+                }
+
 
 
 |               
@@ -283,8 +322,8 @@ const Modal = ({ artwork, artworkinfo, artistName, imgurl, description, dimensio
                 onClick={()=> seteditDescription(true)}
                 />
 
-                <h3 className="mt-6 text-black tracking-[.25em]"><span className="font-bold">TYPE</span> IMG/JPG</h3>
-                <p className="text-black"><span className="font-bold">Dimensiones: </span>{ dimensions} <span className="font-bold">Peso</span> {peso}</p>
+                <h3 className="mt-6 text-black tracking-[.25em]"><span className="font-bold">TYPE</span> {` ${contenttype}`}</h3>
+                <p className="text-black"><span className="font-bold">Dimensiones: </span>{ dimensions}{contenttype === "image" ?  <p><span className="font-bold">{" Peso"}</span> { peso }</p> : "" }</p>
                 </>
                 
 

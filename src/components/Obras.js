@@ -4,6 +4,7 @@ import QualificationModal from './QualificationModal';
 import { useAuth } from "../context/authContext"
 import { app } from '../firebase'
 import { getFirestore, doc, getDocs, collection } from "firebase/firestore"
+import { getStorage, ref, getMetadata } from "firebase/storage";
 
 const firestore = getFirestore(app); 
 
@@ -15,15 +16,141 @@ const [totalArtworks, setTotalArtworks] = useState([]);
 const [curatorview, setcuratorView] = useState(iscurator);
 /* console.log("Email desde Obras", userMail); */
 
+const [obrasVisualizacion, setobrasVisualizacion] = useState([]);
+
+
 
  //console.log("Obras desde componente <Obras>", obras);
 
+ const getArtworks = async () => {
+
+  let arrayFinal = [];
+ 
+  for(let i = 0; i < obras.length; i++){
+
+    let fileType = await getFileType(obras[i]);
+
+    console.log("fileType", fileType);
+
+    if (fileType === "image"){
+
+      arrayFinal.push({...obras[i], isvideo: false, isimage: true});
+
+    } else if (fileType === "video"){
+
+      arrayFinal.push({...obras[i], isvideo: true, isimage: false});
+
+    } 
+  
+  }
+
+  return arrayFinal;
+
+}
+
 useEffect(()=>{
 
-  /* setcuratorView(true); */
+ 
+  getArtworks().then((arrayFinal)=>{
+
+    setobrasVisualizacion(arrayFinal)
+
+  })
 
   
-},[])
+},[obrasVisualizacion.length])
+
+
+
+function getMediaElement(obra, url, contentType) {
+
+    return(
+  
+      <>
+      <div className="shadow overflow-hidden"
+      style={{ 
+        backgroundImage: `url("${ obra.imgurl }")` 
+      }}
+      onMouseEnter={() => setIsShown(true)}
+      onMouseLeave={() => setIsShown(false)}
+      >  { isShown &&             
+          <div className="h-fit pt-72 hhd:pt-48 hmd:pt-36 hsm:pt-28">
+            {/*  */}
+            
+            <div className="z-10 flex flex-col pt-56 tablet:pt-28 hd:pt-9 lg:pt-64 pl-4 rounded-l-[15rem] bg-[#26A7A3] h-[1000px] lg:h-[1000px] bg-opacity-60">
+
+              <p className="text-white font-bold text-right pr-6 uppercase text-xl tablet:text-base hd:text-lg lg:text-xl truncate ...">{ obra.title }</p>
+              <p className="text-white text-right uppercase pr-6 text-lg tablet:text-sm hd:text-base lg:text-lg">{ artistname }</p>
+              <Modal className="ml-auto" artwork ={ obra.title } artworkinfo={ obra } artistex= { artistex } description={ obra.description } artistName= { artistname } imgurl= { obra.imgurl } dimensions={ obra.widtheight} peso={ obra.weight } artistcv={ cvURL } artistsemblance={ semblanceURL } projectdescription={ projectURL } onMouseEnter={() => setIsShown(false)} />
+                      <hr style={{
+                            backgroundColor: "white",
+                            height: 1,
+                            borderStyle: "none"
+                      }} 
+                      className="mr-6 ml-6 mt-1"
+                      />
+              </div>
+{/*                         <div style={{
+                    width: "475px",
+                    height: "1000px",
+                    borderRadius: "15rem 0",
+                    backgroundColor: "#26A7A3",
+          }}
+          className="opacity-100 ml-auto mt-4"
+          ></div> */}
+
+          </div>
+          }
+      </div>
+
+      
+
+      </>)
+/* else if (isVideo(contentType)) {
+    return (
+      <video src={url} controls>
+        Your browser does not support the video tag.
+      </video>
+    );
+  } else {
+    return <div>Unsupported file type</div>;
+  } */
+}
+
+const [mediaElement, setMediaElement] = useState(null);
+
+const getFileType = async (obra) => {
+
+  let fileType;
+
+  const storage = getStorage(app);
+  const storageRef = ref(storage, obra.imgurl);
+  await getMetadata(storageRef)
+  .then((metadata) => {
+    // Check if the file is an image or video
+    if (metadata.contentType.startsWith("image/")) {
+
+      fileType = "image"
+
+
+    } else if(metadata.contentType.startsWith("video/")){
+
+      fileType = "video"
+
+
+    } else{
+      
+      console.warn("Unsupported file type:", metadata.contentType);
+
+    }
+  })
+  .catch((error) => {
+    console.error("Error getting metadata:", error);
+  });
+
+  return fileType;
+  
+}
 
 
 
@@ -145,28 +272,74 @@ else if(sliderorsearch === "slider") {
 
             :
 
-              obras.map((obra) =>{
+                obrasVisualizacion.map((obra) =>{
 
-                /* console.log("Obra", obra);*/
-                
+                  if(obra.isimage){
+
                   return(
   
-                      <>
+                    <>
+                    <div className="shadow overflow-hidden"
+                    style={{ 
+                      backgroundImage: `url("${ obra.imgurl }")` 
+                    }}
+                    onMouseEnter={() => setIsShown(true)}
+                    onMouseLeave={() => setIsShown(false)}
+                    >  { isShown &&             
+                        <div className="h-fit pt-72 hhd:pt-48 hmd:pt-36 hsm:pt-28">
+                          {/*  */}
+                          
+                          <div className="z-10 flex flex-col pt-56 tablet:pt-28 hd:pt-9 lg:pt-64 pl-4 rounded-l-[15rem] bg-[#26A7A3] h-[1000px] lg:h-[1000px] bg-opacity-60">
+              
+                            <p className="text-white font-bold text-right pr-6 uppercase text-xl tablet:text-base hd:text-lg lg:text-xl truncate ...">{ obra.title }</p>
+                            <p className="text-white text-right uppercase pr-6 text-lg tablet:text-sm hd:text-base lg:text-lg">{ artistname }</p>
+                            <Modal className="ml-auto" artwork ={ obra.title } artworkinfo={ obra } artistex= { artistex } description={ obra.description } artistName= { artistname } imgurl= { obra.imgurl } dimensions={ obra.widtheight} peso={ obra.weight } artistcv={ cvURL } artistsemblance={ semblanceURL } projectdescription={ projectURL } contenttype={ "image" } onMouseEnter={() => setIsShown(false)} />
+                                    <hr style={{
+                                          backgroundColor: "white",
+                                          height: 1,
+                                          borderStyle: "none"
+                                    }} 
+                                    className="mr-6 ml-6 mt-1"
+                                    />
+                            </div>
+              {/*                         <div style={{
+                                  width: "475px",
+                                  height: "1000px",
+                                  borderRadius: "15rem 0",
+                                  backgroundColor: "#26A7A3",
+                        }}
+                        className="opacity-100 ml-auto mt-4"
+                        ></div> */}
+              
+                        </div>
+                        }
+                    </div>
+              
+                    
+              
+                    </>)
+
+                  } else if(obra.isvideo){
+
+                    return(
+                      
                       <div className="shadow overflow-hidden"
-                      style={{ 
-                        backgroundImage: `url("${ obra.imgurl }")` 
-                      }}
+
                       onMouseEnter={() => setIsShown(true)}
                       onMouseLeave={() => setIsShown(false)}
-                      >  { isShown &&             
-                          <div className="h-fit pt-72 hhd:pt-48 hmd:pt-36 hsm:pt-28">
+                      >
+                      <div className="relative">
+                      <video className="absolute" autoPlay loop muted src={obra.imgurl} />
+                      </div>
+                      { isShown &&             
+                          <div className="h-fit pt-72 hhd:pt-48 hmd:pt-36 hsm:pt-28 bg-transparent z-50">
                             {/*  */}
                             
                             <div className="z-10 flex flex-col pt-56 tablet:pt-28 hd:pt-9 lg:pt-64 pl-4 rounded-l-[15rem] bg-[#26A7A3] h-[1000px] lg:h-[1000px] bg-opacity-60">
-  
+                
                               <p className="text-white font-bold text-right pr-6 uppercase text-xl tablet:text-base hd:text-lg lg:text-xl truncate ...">{ obra.title }</p>
                               <p className="text-white text-right uppercase pr-6 text-lg tablet:text-sm hd:text-base lg:text-lg">{ artistname }</p>
-                              <Modal className="ml-auto" artwork ={ obra.title } artworkinfo={ obra } artistex= { artistex } description={ obra.description } artistName= { artistname } imgurl= { obra.imgurl } dimensions={ obra.widtheight} peso={ obra.weight } artistcv={ cvURL } artistsemblance={ semblanceURL } projectdescription={ projectURL } onMouseEnter={() => setIsShown(false)} />
+                              <Modal className="ml-auto" artwork ={ obra.title } artworkinfo={ obra } artistex= { artistex } description={ obra.description } artistName= { artistname } imgurl= { obra.imgurl } dimensions={ obra.widtheight} peso={ obra.weight } artistcv={ cvURL } artistsemblance={ semblanceURL } projectdescription={ projectURL } contenttype={ "video" } onMouseEnter={() => setIsShown(false)} />
                                       <hr style={{
                                             backgroundColor: "white",
                                             height: 1,
@@ -175,23 +348,39 @@ else if(sliderorsearch === "slider") {
                                       className="mr-6 ml-6 mt-1"
                                       />
                               </div>
-  {/*                         <div style={{
-                                    width: "475px",
-                                    height: "1000px",
-                                    borderRadius: "15rem 0",
-                                    backgroundColor: "#26A7A3",
-                          }}
-                          className="opacity-100 ml-auto mt-4"
-                          ></div> */}
-  
+                
                           </div>
                           }
                       </div>
-  
-                      
-  
-                      </>
-                  )})
+
+                    )
+
+                  }
+                /* console.log("Obra", obra);*/
+
+                //let fileType = getFileType(obra);
+
+/*                 return(
+                  {
+                  mediaElement
+                  }
+
+                ) */
+
+
+                //console.log(`Media Type ${obra.title}`, mediaElement);
+
+/*                 if (mediaType.includes("image/")) {
+                  return <img src={`${obra.imgurl}`}></img>
+                } else if (mediaType.includes("video/")) {
+                  return <video src={`${obra.imgurl}`} controls>
+                  Your browser does not support the video tag.
+                </video>
+                } else {
+                  return <div>Unsupported file type</div>;
+                } */
+                
+               })
 
               }
 
