@@ -10,7 +10,7 @@ const firestore = getFirestore(app);
 
 export default function Obras({obras, artistname, email, iscurator, cvURL, semblanceURL, projectURL, artistex, searchtext, scoresearch, sliderorsearch}) {
 
-const [isShown, setIsShown] = useState(false);
+const [isShown, setIsShown] = useState(true);
 const [userMail, setuserMail] = useState(email);
 const [totalArtworks, setTotalArtworks] = useState([]);
 const [curatorview, setcuratorView] = useState(iscurator);
@@ -283,8 +283,8 @@ else if(sliderorsearch === "slider") {
                     style={{ 
                       backgroundImage: `url("${ obra.imgurl }")` 
                     }}
-                    onMouseEnter={() => setIsShown(true)}
-                    onMouseLeave={() => setIsShown(false)}
+/*                     onMouseEnter={() => setIsShown(true)}
+                    onMouseLeave={() => setIsShown(false)} */
                     >  { isShown &&             
                         <div className="h-fit pt-72 hhd:pt-48 hmd:pt-36 hsm:pt-28">
                           {/*  */}
@@ -324,9 +324,9 @@ else if(sliderorsearch === "slider") {
                     return(
                       
                       <div className="shadow overflow-hidden"
-
+/* 
                       onMouseEnter={() => setIsShown(true)}
-                      onMouseLeave={() => setIsShown(false)}
+                      onMouseLeave={() => setIsShown(false)} */
                       >
                       <div className="relative">
                       <video className="absolute" autoPlay loop muted src={obra.imgurl} />
