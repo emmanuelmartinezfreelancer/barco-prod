@@ -353,7 +353,7 @@ else if(sliderorsearch === "slider") {
                       <>
                       <div className="shadow overflow-hidden bg-center bg-cover"
                       style={{ 
-                        backgroundImage: `url(https://firebasestorage.googleapis.com/v0/b/bienal-barco-02.appspot.com/o/errors%2FerrorBarco.png?alt=media&token=4bfda47c-ffeb-4238-9824-c5eb0bf3b563)` 
+                        backgroundImage: `url(https://firebasestorage.googleapis.com/v0/b/bienal-barco-02.appspot.com/o/errors%2FerrorBarcoVideo.png?alt=media&token=e097dbf7-26b4-403a-9f4c-2d2d402edf21)` 
                       }}
   /*                     onMouseEnter={() => setIsShown(true)}
                       onMouseLeave={() => setIsShown(false)} */
@@ -365,7 +365,7 @@ else if(sliderorsearch === "slider") {
                 
                               <p className="text-white font-bold text-right pr-6 uppercase text-xl tablet:text-base hd:text-lg lg:text-xl truncate ...">{ obra.title }</p>
                               <p className="text-white text-right uppercase pr-6 text-lg tablet:text-sm hd:text-base lg:text-lg">{ artistname }</p>
-                              <Modal className="ml-auto" artwork ={ obra.title } artworkinfo={ obra } artistex= { artistex } description={ obra.description } artistName= { artistname } imgurl= { "https://firebasestorage.googleapis.com/v0/b/bienal-barco-02.appspot.com/o/errors%2FerrorBarco.png?alt=media&token=4bfda47c-ffeb-4238-9824-c5eb0bf3b563" } dimensions={ obra.widtheight} peso={ obra.weight } artistcv={ cvURL } artistsemblance={ semblanceURL } projectdescription={ projectURL } contenttype={ "image" } onMouseEnter={() => setIsShown(false)} />
+                              <Modal className="ml-auto" artwork ={ obra.title } artworkinfo={ obra } artistex= { artistex } description={ obra.description } artistName= { artistname } imgurl= { "https://firebasestorage.googleapis.com/v0/b/bienal-barco-02.appspot.com/o/errors%2FerrorBarcoVideo.png?alt=media&token=e097dbf7-26b4-403a-9f4c-2d2d402edf21" } dimensions={ obra.widtheight} peso={ obra.weight } artistcv={ cvURL } artistsemblance={ semblanceURL } projectdescription={ projectURL } contenttype={ "image" } onMouseEnter={() => setIsShown(false)} />
                                       <hr style={{
                                             backgroundColor: "white",
                                             height: 1,
