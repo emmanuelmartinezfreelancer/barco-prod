@@ -148,11 +148,12 @@ const Modal = ({ artwork, artworkinfo, artistName, imgurl, description, dimensio
     <>
     <div className="flex flex-col">
       <button
-        className="ml-auto pr-6 text-3xl bg-transparent text-white font-bold outline-none focus:outline-none"
+        className="border-2 border-white  text-white hover:text-white hover:bg-black font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mb-1 ml-auto mx-5"
         type="button"
         onClick={() => setShowModal(true)}
       >
-        <AiOutlineEye className="mt-6 text-base tablet:text-2xl hd:text-2xl lg:text-3xl" />
+        {/* <AiOutlineEye className="mt-6 text-base tablet:text-2xl hd:text-2xl lg:text-3xl" /> */}
+        Ver obra
 
       </button>
 

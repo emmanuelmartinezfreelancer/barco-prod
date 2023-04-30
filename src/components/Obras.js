@@ -34,11 +34,15 @@ const [obrasVisualizacion, setobrasVisualizacion] = useState([]);
 
     if (fileType === "image"){
 
-      arrayFinal.push({...obras[i], isvideo: false, isimage: true});
+      arrayFinal.push({...obras[i], isvideo: false, isimage: true, unknown: false});
 
     } else if (fileType === "video"){
 
-      arrayFinal.push({...obras[i], isvideo: true, isimage: false});
+      arrayFinal.push({...obras[i], isvideo: true, isimage: false, unknown: false});
+
+    } else if (fileType === "unknown"){
+
+      arrayFinal.push({...obras[i], isvideo: false, isimage: false, unknown: true});
 
     } 
   
@@ -119,46 +123,27 @@ function getMediaElement(obra, url, contentType) {
 
 const [mediaElement, setMediaElement] = useState(null);
 
+
+
 const getFileType = async (obra) => {
 
   let fileType;
 
-  //const storageRef = getStorage(app);
-  const storage = getStorage(app);
+  const response = await fetch(obra.imgurl);
+  const blob = await response.blob();
+  const blobType = blob.type;
 
-  const storageRef = ref(storage, obra.imgurl);
-
-/*   const storageRef = ref(storage);
-  const childRef = child(storageRef, obra.imgurl);   */
-
-  await getMetadata(storageRef)
-  .then((metadata) => {
-    // Check if the file is an image or video
-    if (metadata.contentType.startsWith("image/")) {
-
-      fileType = "image"
-
-
-    } else if(metadata.contentType.startsWith("video/")){
-
-      fileType = "video"
-
-
-    } else{
-      
-      console.warn("Unsupported file type:", metadata.contentType);
-
-    }
-  })
-  .catch((error) => {
-    console.error("Error getting metadata:", error);
-  });
+  if (blobType.startsWith("image/")) {
+    fileType = "image";
+  } else if (blobType.startsWith("video/")) {
+    fileType = "video";
+  } else {
+    fileType="unknown"
+  }
 
   return fileType;
   
 }
-
-
 
 const arrayArtworks = obras.map((artista)=>{return artista.artworks}).flat()
 
@@ -361,7 +346,57 @@ else if(sliderorsearch === "slider") {
 
                     )
 
-                  }
+                  } else if(obra.unknown){
+
+                    return(
+    
+                      <>
+                      <div className="shadow overflow-hidden bg-center bg-cover"
+                      style={{ 
+                        backgroundImage: `url(https://firebasestorage.googleapis.com/v0/b/bienal-barco-02.appspot.com/o/errors%2FerrorBarco.png?alt=media&token=4bfda47c-ffeb-4238-9824-c5eb0bf3b563)` 
+                      }}
+  /*                     onMouseEnter={() => setIsShown(true)}
+                      onMouseLeave={() => setIsShown(false)} */
+                      >  { isShown &&             
+                          <div className="h-fit pt-72 hhd:pt-48 hmd:pt-36 hsm:pt-28">
+                            {/*  */}
+                            
+                            <div className="z-10 flex flex-col pt-56 tablet:pt-28 hd:pt-9 lg:pt-64 pl-4 rounded-l-[15rem] bg-[#26A7A3] h-[1000px] lg:h-[1000px] bg-opacity-60">
+                
+                              <p className="text-white font-bold text-right pr-6 uppercase text-xl tablet:text-base hd:text-lg lg:text-xl truncate ...">{ obra.title }</p>
+                              <p className="text-white text-right uppercase pr-6 text-lg tablet:text-sm hd:text-base lg:text-lg">{ artistname }</p>
+                              <Modal className="ml-auto" artwork ={ obra.title } artworkinfo={ obra } artistex= { artistex } description={ obra.description } artistName= { artistname } imgurl= { "https://firebasestorage.googleapis.com/v0/b/bienal-barco-02.appspot.com/o/errors%2FerrorBarco.png?alt=media&token=4bfda47c-ffeb-4238-9824-c5eb0bf3b563" } dimensions={ obra.widtheight} peso={ obra.weight } artistcv={ cvURL } artistsemblance={ semblanceURL } projectdescription={ projectURL } contenttype={ "image" } onMouseEnter={() => setIsShown(false)} />
+                                      <hr style={{
+                                            backgroundColor: "white",
+                                            height: 1,
+                                            borderStyle: "none"
+                                      }} 
+                                      className="mr-6 ml-6 mt-1"
+                                      />
+                              </div>
+                {/*                         <div style={{
+                                    width: "475px",
+                                    height: "1000px",
+                                    borderRadius: "15rem 0",
+                                    backgroundColor: "#26A7A3",
+                          }}
+                          className="opacity-100 ml-auto mt-4"
+                          ></div> */}
+                
+                          </div>
+                          }
+                      </div>
+                
+                      
+                
+                      </>)
+  
+                    }
+
+
+
+
+                  
                 /* console.log("Obra", obra);*/
 
                 //let fileType = getFileType(obra);
