@@ -4,7 +4,7 @@ import QualificationModal from './QualificationModal';
 import { useAuth } from "../context/authContext"
 import { app } from '../firebase'
 import { getFirestore, doc, getDocs, collection } from "firebase/firestore"
-import { getStorage, ref, getMetadata } from "firebase/storage";
+import { getStorage, ref, getMetadata, child } from "firebase/storage";
 
 const firestore = getFirestore(app); 
 
@@ -123,8 +123,14 @@ const getFileType = async (obra) => {
 
   let fileType;
 
+  //const storageRef = getStorage(app);
   const storage = getStorage(app);
+
   const storageRef = ref(storage, obra.imgurl);
+
+/*   const storageRef = ref(storage);
+  const childRef = child(storageRef, obra.imgurl);   */
+
   await getMetadata(storageRef)
   .then((metadata) => {
     // Check if the file is an image or video

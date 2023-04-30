@@ -12,3 +12,7 @@ build/
 folioDesign/
 folioFirebaseTemplate/
 html-pages/
+
+credentials.json
+
+backup.json

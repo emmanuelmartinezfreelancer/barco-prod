@@ -902,6 +902,7 @@ const projectFileHandler = async(e)=>{
                     Imagen / Video de la obra
                     <AiOutlineQuestionCircle/>
                   </label>          
+
                   
                   </Tooltip>
                   
@@ -912,6 +913,12 @@ const projectFileHandler = async(e)=>{
                     className="shadow appearance-none text-sm bg-transparent border border-[#40E0D0] rounded w-full py-2 px-3 text-teal-400 leading-tight focus:outline-none focus:shadow-outline"
                     accept="image/jpeg, video/mpeg, video/mpg, video/wmv, video/avi, video/mp4"
                   />
+              </div>
+
+              <div className="mb-4">
+
+              <p className="text-teal-400 text-sm">Espera a que termine de cargar tu archivo para que aparezca el botón de Next y te permita terminar el registro.</p>
+
               </div>
 
               </ThemeProvider>
