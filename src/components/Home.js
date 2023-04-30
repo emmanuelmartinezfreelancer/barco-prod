@@ -555,9 +555,12 @@ export function Home(){
         
 
               {/* CARDS */}
+            
+              
 
 
             {
+              
             curatorview ?  
             
               ( userDoc ? <div className="flex flex-row flex-nowrap absolute bottom-0 h-full w-fit pb-20 pt-44 gap-x-4"><Obras obras={ totalArtworks } artistname={ artistName } email={ email } iscurator={ true } searchtext={search} scoresearch={ scoreSearch } sliderorsearch={ sliderorSearch }/> </div>: null )

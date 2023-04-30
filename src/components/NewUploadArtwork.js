@@ -110,15 +110,21 @@ export function NewUploadArtwork() {
     
         const fileRef = ref(storage, `artworks/${user.email}${localFile.name}`)
     
-        await uploadBytes(fileRef, localFile);
-    
-        URLArtwork = await getDownloadURL(fileRef);
+        await uploadBytes(fileRef, localFile).then((snapshot)=>{
+        getDownloadURL(snapshot.ref).then((downloadURL)=>{
   
-        setArtwork({...artwork, imgurl : URLArtwork})
+          setArtwork({...artwork, imgurl : downloadURL})
+  
+          setdisableButton(false);
+      
+          console.log("URL New Thumbnail", downloadURL);
 
-        setdisableButton(false);
+          })
+          
+
+        })
     
-        console.log("URL New Thumbnail", URLArtwork);
+
   
     
      }
