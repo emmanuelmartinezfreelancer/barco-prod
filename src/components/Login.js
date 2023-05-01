@@ -134,12 +134,12 @@ export function Login() {
 
       <hr className="bg-grey my-8 h-px bg-[#40E0D0] border-0 dark:bg-[#40E0D0"/>
 
-      <p className="my-4 sm:hidden md:flex text-sm  justify-between">
+{/*       <p className="my-4 sm:hidden md:flex text-sm  justify-between">
         Don't have an account?
         <Link to="/register" className="text-teal-400 hover:text-gray-500">
           Register
         </Link>
-      </p>
+      </p> */}
       </form>
 {/*       <button
         onClick={handleGoogleSignin}

@@ -25,7 +25,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/register" element={<Register />} />
+{/*           <Route path="/register" element={<Register />} /> */}
           <Route path="/upload" element={<NewUploadArtwork />} />
           <Route path="/profile" element={
               <ProtectedRoute>
