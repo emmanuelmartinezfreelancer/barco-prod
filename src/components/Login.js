@@ -64,7 +64,7 @@ export function Login() {
       {error && <Alert message={error} />}
 
 
-      <div className="sm:w-full md:w-3/5 bg-[#40E0D0] p-5 h-screen bg-[url('/assets/backgroundHome.svg')]">
+      <div className="w-full bg-[#40E0D0] p-5 h-screen bg-[url('/assets/backgroundHome.svg')]">
 
      
       <a href="https://barcobienal.com" className="flex place-content-center h-full">
@@ -78,7 +78,7 @@ export function Login() {
       </div>
           
 
-      <div className="bg-black sm:w-full md:w-2/5 grid h-screen place-items-center">
+{/*       <div className="bg-black sm:w-full md:w-2/5 grid h-screen place-items-center">
       
       <form
         onSubmit={handleSubmit}
@@ -134,22 +134,10 @@ export function Login() {
 
       <hr className="bg-grey my-8 h-px bg-[#40E0D0] border-0 dark:bg-[#40E0D0"/>
 
-{/*       <p className="my-4 sm:hidden md:flex text-sm  justify-between">
-        Don't have an account?
-        <Link to="/register" className="text-teal-400 hover:text-gray-500">
-          Register
-        </Link>
-      </p> */}
       </form>
-{/*       <button
-        onClick={handleGoogleSignin}
-        className="hover:bg-black hover:text-white text-black shadow rounded border-2 border-black py-2 px-4 w-full"
-      >
-        Google login
-      </button> */}
 
 
-    </div>
+        </div> */}
 
         </div>
     

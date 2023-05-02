@@ -65,7 +65,7 @@ export function Home(){
 
     const [showuploadButton, setshowuploadButton] =  useState(true);
 
-    const [iscurator, setisCurator] = useState([{name: "Tobias Ostrander", email: "tobiasostrander@gmail.com"}, {name: "Emmanuel Martínez", email: "vel.freelancer@gmail.com"}, {name: "Oscar Ascencio", email:"oscarascencioc@hotmail.com"}]);
+    const [iscurator, setisCurator] = useState([{name: "Tobias Ostrander", email: "tobiasostrander@gmail.com"}, {name: "Emmanuel Martínez", email: "vela.freelancer@gmail.com"}, {name: "Oscar Ascencio", email:"oscarascencioc@hotmail.com"}]);
 
     const [curatorview, setcuratorView] = useState(false);
 
@@ -364,7 +364,7 @@ export function Home(){
 
       <>
 
- { descriptionAlert &&
+{/*  { descriptionAlert &&
       <div className="flex fixed flex-col w-full h-full bg-black justify-center align-center gap-4">
 
         <h1 className="text-xl uppercase text-center">¡Oh No! Nuestro sistema ha detectado que no has terminado de llenar los datos de las siguientes obras:</h1>
@@ -397,7 +397,7 @@ export function Home(){
         }}
         className="w-2/12 rounded-xl border-2 border-teal-400 px-3 py-2 mx-auto hover:bg-teal-400 hover:text-white mt-4">¡Entendido¡</button>
       </div>
-      } 
+      }  */}
 
       {curatorview &&
               <div className="flex flex-row fixed w-full h-[30px] mt-16 z-50 ">
