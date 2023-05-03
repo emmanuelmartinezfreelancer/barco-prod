@@ -77,6 +77,26 @@ export function SendMail() {
     await updateData();
   }
 
+  const getFileType = async (url) => {
+
+    let fileType;
+  
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const blobType = blob.type;
+  
+    if (blobType.startsWith("image/")) {
+      fileType = "image";
+    } else if (blobType.startsWith("video/")) {
+      fileType = "video";
+    } else {
+      fileType="unknown"
+    }
+  
+    return "image";
+    
+  }
+
 const createMail = async(email, customText, folio)=>{
 
     //Crear referencia al documento
@@ -285,6 +305,7 @@ const createMail = async(email, customText, folio)=>{
                       const actualuser = arrayUsers.find(element => e.target.value === element.email);
                       setactualUser(actualuser);
                       console.log("actual user",actualuser);
+
                       }
                     
                     }
@@ -333,6 +354,8 @@ const createMail = async(email, customText, folio)=>{
                 
                 actualUser.artworks.map((artwork)=>{
 
+                    
+
                     return (
 
                     <>
@@ -344,6 +367,11 @@ const createMail = async(email, customText, folio)=>{
                     }}></div>
 
                     <p>{artwork.title}</p>
+                    {
+
+                      artwork.imgurl ? <div className="flex flex-col pt-2 border-t-2 border-teal-400"><p>Si hay obra subida</p><a href={artwork.imgurl} target="_blank" rel="noreferrer" className="hover:text-gray-300 cursor-pointer">Descargar</a></div> : <p> No hay obra</p>
+
+                    }
                     </div>
 
                     </>
