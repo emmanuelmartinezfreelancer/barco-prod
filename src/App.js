@@ -10,6 +10,7 @@ import { AuthProvider } from "./context/authContext";
 import { HomeJuez } from "./components/HomeJuez";
 import { NewUploadArtwork } from "./components/NewUploadArtwork"; 
 import { SendMail } from "./components/SendMail";
+import { LoginAdmin } from "./components/LoginAdmin";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/admin" element={<LoginAdmin />} />
           <Route
             path="/"
             element={
@@ -44,7 +46,8 @@ function App() {
                   <SendMail />
               </ProtectedRouteAdmin>
 
-          }/>
+          }
+          />
         </Routes>
       </AuthProvider>
     </div>

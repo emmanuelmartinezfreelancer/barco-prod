@@ -24,7 +24,7 @@ export function SendMail() {
 
   const [actualUser, setactualUser] = useState(null);
 
-  const [disabledButton, setdisabledButton ] = useState(true);
+  const [disabledButton, setdisabledButton ] = useState(false);
 
   const [actualFolio, setactualFolio] = useState(null);
 
@@ -44,8 +44,8 @@ export function SendMail() {
 
   //setactualFolio(folioNumber.current);
 
-  console.log("Users from <Send Mail>", allUsers);
-  console.log("folionumber from <Send Mail>", folioNumber.current);
+/*   console.log("Users from <Send Mail>", allUsers);
+  console.log("folionumber from <Send Mail>", folioNumber.current); */
 
   const navigate = useNavigate();
 
@@ -155,6 +155,50 @@ const createMail = async(email, customText, folio)=>{
   
   }
 
+  const sendMailToUser = async(email, customText)=>{
+
+    //Crear referencia al documento
+    const docuRef = doc(firestore, `mail/${email}`)
+
+    const htmlCustom = `
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+
+    <body>
+    <p>${customText}</p>
+    </body>
+    </html>
+    `;
+
+    const emailFinal = {
+
+        to: [`${email}`],
+        message: {
+        subject: 'Saludos desde Barco 2023',
+        text: '',
+        html: htmlCustom
+        }
+
+      }
+    
+    console.log("Mail para", email);
+
+    await setDoc(docuRef, emailFinal);
+
+    const query = await getDoc(docuRef);
+  
+    const infoDocu = query.data();
+
+    return infoDocu;
+  
+  }
+
   async function sendMailGrupal(arrayMails, customText){
     
     for(let i = 0; i <= arrayMails.length - 1; i++){
@@ -191,7 +235,7 @@ const createMail = async(email, customText, folio)=>{
             
     for(let i = 0; i < allUsers.length; i++){
 
-      finalUsers.push({ name: allUsers[i].artistname, email: allUsers[i].email, artworks: allUsers[i].artworks, folio: allUsers[i].folio })
+      finalUsers.push(allUsers[i]);
       usersMail.push(allUsers[i].email);
 
     }
@@ -202,8 +246,8 @@ const createMail = async(email, customText, folio)=>{
 
     return () => { 
 
-    console.log("Array de usuarios", arrayUsers);
-    console.log("Array de mails usuarios", arrayMails);
+/*     console.log("Array de usuarios", arrayUsers);
+    console.log("Array de mails usuarios", arrayMails); */
 
     }
 
@@ -240,10 +284,11 @@ const createMail = async(email, customText, folio)=>{
                       {
                       const actualuser = arrayUsers.find(element => e.target.value === element.email);
                       setactualUser(actualuser);
+                      console.log("actual user",actualuser);
                       }
                     
                     }
-                    className="font-helveticaL pt-3 py-4 px-3 border-2 border-text-teal-400 rounded text-teal-400 text-sm rounded-lg  w-full block p-2.5 dark:bg-transparent dark:border-teal-400 placeholder-teal-400 dark:placeholder-teal-400 dark:text-teal-400 dark:focus:ring-teal-400 dark:focus:border-teal-400"
+                    className="font-helveticaL bg-black pt-3 py-4 px-3 border-2 border-text-teal-400 rounded text-teal-400 text-sm rounded-lg  w-full block p-2.5 dark:bg-transparent dark:border-teal-400 placeholder-teal-400 dark:placeholder-teal-400 dark:text-teal-400 dark:focus:ring-teal-400 dark:focus:border-teal-400"
                     placeholder=""
                     >
                     <option selected>Select...</option>
@@ -253,7 +298,7 @@ const createMail = async(email, customText, folio)=>{
                     return(
 
                       <>
-                      <option value={`${user.email}`}>{user.email}</option>
+                      <option className="bg-black" value={`${user.email}`}>{user.email}</option>
                       </>
 
                       )
@@ -293,7 +338,7 @@ const createMail = async(email, customText, folio)=>{
                     <>
 
                     <div className="flex flex-col w-full gap-2">
-                    <div className="w-[250px] h-[250px] bg-cover bg-center bg-no-repeat"
+                    <div className="w-[150px] h-[150px] lg:w-[250px] lg:h-[250px] bg-cover bg-center bg-no-repeat"
                     style={{ 
                       backgroundImage: `url("${ artwork.imgurl }")` 
                     }}></div>
@@ -333,7 +378,7 @@ const createMail = async(email, customText, folio)=>{
               <textarea
                 name = "textmessage"
                 type="text"
-                onChange={(e) => {setmailData(e.target.value); console.log("Mail data", mailData)}
+                onChange={(e) => {setmailData(e.target.value); /* console.log("Mail data", mailData) */}
               }
                 className="font-helveticaL rounded-lg text-base shadow appearance-none bg-transparent border-2 border-teal-400 rounded w-full py-3 px-3 text-teal-400  h-[200px] focus:outline-none focus:shadow-outline"
                 placeholder=""
@@ -342,30 +387,22 @@ const createMail = async(email, customText, folio)=>{
             </div>
 
                   <div className="mt-3 w-full flex flex-row pb-8">
-                  { !disabledButton ?
+
 
                       <button
-                      className="w-4/12 py-3 pl-12 mt-2 ml-auto border-2 border-gray-400 text-gray-400 bg-black font-bold text-lg rounded-md shadow hover:cursor-not-allowed "
-                      type="button"
-                      disabled                     
-                      >
-                      <div className="flex flex-row pr-6">
-                      {arePhones ? <p className="my-auto mx-auto">Send Messages</p> : <p className="my-auto mx-auto">Enviar</p> }
-                      <IoSendSharp className="my-auto text-2xl mr-9"/>
-                      </div>
-                      </button>
-
-
-                      :
-
-                      <button
-                      className="w-4/12 py-3 pl-12 mt-2 ml-auto border-2 border-teal-400 text-teal-400 bg-black hover:text-white font-bold text-lg rounded-md shadow hover:border-white outline-none focus:outline-none"
+                      className={`w-4/12 py-3 pl-12 mt-2 ml-auto border-2  font-bold text-lg rounded-md shadow hover:border-white outline-none focus:outline-none ${disabledButton ? "border-2 border-gray-400 text-gray-400 bg-black font-bold text-lg rounded-md shadow hover:cursor-not-allowed" : "border-teal-400 text-teal-400 bg-black hover:text-white"}`}
                       type="button"
                       onClick={async(e)=>{
                         setdisabledButton(true);
-                        let mail = await createMail(actualUser.email, mailData);
-                        console.log("Mail enviado", mail)
-                        setdisabledButton(false);
+                        await sendMailToUser(actualUser.email, mailData)
+                        .then((mail)=>{
+
+                          console.log("Mail enviado", mail)
+                          setdisabledButton(false);
+
+                        })
+                        .catch((err)=>{ alert("Error al enviar el mail", err)})
+
                         }}                        
                       >
                       <div className="flex flex-row pr-6">
@@ -373,7 +410,6 @@ const createMail = async(email, customText, folio)=>{
                       <IoSendSharp className="my-auto text-2xl mr-9"/>
                       </div>
                       </button>
-                       }
 
 
                   </div>
@@ -382,7 +418,77 @@ const createMail = async(email, customText, folio)=>{
 
     </div>
 
-    <div className="w-1/2">
+   {
+   actualUser &&
+   <div className="w-1/2">
+    <div className="flex flex-col w-full gap-2 lg:gap-3">
+
+    <h1 className="font-bold text-teal-400 text-4xl py-7">Información del usuario</h1>
+
+      <div className="flex-col">
+        <h1 className="text-lg lg:text-3xl">Nombre de artista</h1>
+        <p className="text-base lg:text-2xl">{actualUser.artistname ? actualUser.artistname : "No hay nombre de artista"}</p>
+      </div>
+
+      <div className="flex-col">
+        <h1 className="text-lg lg:text-3xl">Disciplina</h1>
+        <p className="text-base lg:text-2xl">{actualUser.discipline ? actualUser.discipline : "No hay disciplina"}</p>
+      </div>
+
+      <div className="flex-col">
+        <h1 className="text-lg lg:text-3xl">Teléfono</h1>
+        <p className="text-base lg:text-2xl">{actualUser.phone ? actualUser.phone : "No hay teléfono"}</p>
+      </div>
+
+      <div className="flex-col">
+        <h1 className="text-lg lg:text-3xl">Dirección</h1>
+        <p className="text-base lg:text-2xl">{actualUser.address ? actualUser.address : "No hay dirección"}</p>
+      </div>
+
+      <div className="flex-col">
+        <h1 className="text-lg lg:text-3xl">Estado</h1>
+        <p className="text-base lg:text-2xl">{actualUser.state ? actualUser.state : "No hay estado"}</p>
+      </div>
+
+      <div className="flex-col">
+        <h1 className="text-lg lg:text-3xl">Fecha de nacimiento</h1>
+        <p className="text-base lg:text-2xl">{actualUser.birth.day ? `${actualUser.birth.day + " / " + actualUser.birth.month + " / " + actualUser.birth.year }` : "No hay fecha de nacimiento"}</p>
+      </div>
+
+      <div className="flex-col">
+        <h1 className="text-lg lg:text-3xl">Sitio web</h1>
+        <p className="text-base lg:text-2xl">{actualUser.web ? actualUser.web : "No hay sitio web"}</p>
+      </div>
+
+      <div className="flex-col">
+        <h1 className="text-lg lg:text-3xl">CV</h1>
+        { actualUser.cvUrl ? <a href={`${actualUser.cvUrl}`} rel="noreferrer" target="_blank" className="text-base lg:text-2xl hover:text-gray-300">Descargar</a> : <p className="text-base lg:text-2xl">No hay CV</p> }
+      </div>
+
+      <div className="flex-col">
+        <h1 className="text-lg lg:text-3xl">Semblanza</h1>
+        { actualUser.semblanzaUrl ? <a href={`${actualUser.semblanzaUrl }`} rel="noreferrer" target="_blank" className="text-base lg:text-2xl hover:text-gray-300">Descargar</a> : <p className="text-base lg:text-2xl">No hay Semblanza</p> }
+      </div>
+
+      <div className="flex-col">
+        <h1 className="text-lg lg:text-3xl">Descripción del proyecto</h1>
+        { actualUser.projectUrl ? <a href={actualUser.projectUrl} rel="noreferrer" target="_blank" className="text-base lg:text-2xl hover:text-gray-300">Descargar</a> : <p className="text-base lg:text-2xl">No hay descripción del proyecto</p> }
+      </div>
+
+      <div className="flex-col">
+        <h1 className="text-lg lg:text-3xl">Comprobantes de exposición</h1>
+        <div className="text-base lg:text-2xl flex flex-wrap flex-row gap-2">{actualUser.exposicionesUrls.length > 0 ? actualUser.exposicionesUrls.map((expo, i)=>{ return <a href={`${expo}`} rel="noreferrer" target="_blank" className="text-base lg:text-2xl hover:text-gray-300">{ i + 1 }</a> }) : "No hay fecha de nacimiento"}</div>
+      </div>
+
+
+    </div>
+
+
+   </div>
+  }
+
+  
+    {/*     <div className="w-1/2">
 
     <h1 className="font-bold text-teal-400 text-4xl py-7">Enviar Mail grupal</h1>
       
@@ -415,7 +521,7 @@ const createMail = async(email, customText, folio)=>{
                <button
                 className="w-4/12 py-3 pl-12 mt-2 border-2 border-teal-400 text-teal-400 bg-black hover:text-white font-bold text-lg rounded-md shadow hover:border-white outline-none focus:outline-none"
                 type="button"
-                onClick={(e)=>{ console.log("Mail grupal")/* sendMailGrupal(arrayMails, mailgroupData); */}}>
+                onClick={(e)=>{ console.log("Mail grupal")}}>
                 <div className="flex flex-row pr-6">
                 {arePhones ? <p className="my-auto mx-auto">Send Messages</p> : <p className="my-auto mx-auto">Enviar</p> }
                 <IoSendSharp className="my-auto text-2xl mr-9"/>
@@ -458,10 +564,10 @@ const createMail = async(email, customText, folio)=>{
 
    
 
-</div>
+    </div>
+    */}
 
-   
-
+  
     </main>
     
 

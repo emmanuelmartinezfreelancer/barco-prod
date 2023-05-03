@@ -4,7 +4,7 @@ import { useAuth } from "../context/authContext";
 import { Alert } from "./Alert";
 import { ReactComponent as LogoNuevo } from '../assets/logoBarcoNuevo.svg';
 
-export function Login() {
+export function LoginAdmin() {
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -18,7 +18,7 @@ export function Login() {
     setError("");
     try {
       await login(user.email, user.password);
-      navigate("/");
+      navigate("/send-mail");
     } catch (error) {
         if (error.code === "auth/internal-error"){
                 
@@ -78,7 +78,7 @@ export function Login() {
       </div>
           
 
-{/*         <div className="bg-black sm:w-full md:w-2/5 grid h-screen place-items-center">
+  <div className="bg-black sm:w-full md:w-2/5 grid h-screen place-items-center">
       
       <form
         onSubmit={handleSubmit}
@@ -137,7 +137,7 @@ export function Login() {
       </form>
 
 
-        </div>  */}
+        </div> 
 
         </div>
     

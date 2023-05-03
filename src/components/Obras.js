@@ -20,6 +20,8 @@ const [obrasVisualizacion, setobrasVisualizacion] = useState([]);
 
 
 
+
+
  //console.log("Obras desde componente <Obras>", obras);
 
  const getArtworks = async () => {
@@ -85,7 +87,7 @@ function getMediaElement(obra, url, contentType) {
 
               <p className="text-white font-bold text-right pr-6 uppercase text-xl tablet:text-base hd:text-lg lg:text-xl truncate ...">{ obra.title }</p>
               <p className="text-white text-right uppercase pr-6 text-lg tablet:text-sm hd:text-base lg:text-lg">{ artistname }</p>
-              <Modal className="ml-auto" artwork ={ obra.title } artworkinfo={ obra } artistex= { artistex } description={ obra.description } artistName= { artistname } imgurl= { obra.imgurl } dimensions={ obra.widtheight} peso={ obra.weight } artistcv={ cvURL } artistsemblance={ semblanceURL } projectdescription={ projectURL } onMouseEnter={() => setIsShown(false)} />
+              <Modal className="ml-auto" artwork ={ obra.title } artworkinfo={ obra } artistex= { artistex } description={ obra.description } artistName= { artistname } imgurl= { obra.imgurl } dimensions={ obra.widtheight} peso={ obra.weight } artistcv={ cvURL } artistsemblance={ semblanceURL } projectdescription={ projectURL } />
                       <hr style={{
                             backgroundColor: "white",
                             height: 1,
@@ -145,7 +147,117 @@ const getFileType = async (obra) => {
   
 }
 
-const arrayArtworks = obras.map((artista)=>{return artista.artworks}).flat()
+const arrayArtworks = obras.map((artista)=>{
+
+  //console.log("Artista from arrayArtworks <Obras/>", artista);
+
+  if(artista.artworks !== undefined){  
+    return artista 
+  
+  } else {
+
+      console.log("Artista from arrayArtworks <Obras/>", artista.artistname, "No tiene obras")
+
+  }
+
+
+ 
+/*   artista.artworks.filter((obra)=>{
+
+    if (obra !== "\"\""){
+  
+      return artista
+  
+    }
+  
+  }) */
+  
+  //return artista.artworks
+
+})
+//.flat()
+
+
+const [obrasFiltradas, setObrasFiltradas] = useState(arrayArtworks);
+
+
+const filterArtworksBySearch = () => {
+
+  let filterArtworks = [];
+
+  let obrasFilter = []; 
+
+  if(sliderorsearch === "search"){
+ 
+    arrayArtworks.map((artista)=>{
+  
+       return artista.artworks.map((obra) => {
+  
+        if(obra.title !== undefined){
+  
+          if (searchtext === '') {
+
+            obrasFilter = [];
+           
+            return artista;
+          }
+        
+          else if(obra.title.toLowerCase().includes(searchtext.toLowerCase())){  
+  
+            //console.log("artista from arrayArtworks <Obras/>", artista.artistname, "Obra encontrada");
+  
+            //console.log("obrasFiltradas <Obras/>", obrasFilter)
+
+            let artist = artista;
+  
+            obrasFilter.push({...artista, artworks: obra})
+      
+            return artista;
+      
+        } 
+  
+        } else {
+  
+            console.log("Artista from arrayArtworks <Obras/>", artista.artistname, "Obras undefined")
+            return ""
+        }
+    })
+  
+    })
+    
+  
+  }
+
+  if(obrasFilter.length > 0){
+
+    return obrasFilter
+
+
+  } else{
+
+    obrasFilter = [];
+
+    obrasFilter.push(arrayArtworks)
+    
+    return obrasFilter.flat()
+
+  }
+  
+}
+
+console.log("filterArtworks <Obras/> useEffect", obrasFiltradas)
+
+let obrasFiltroMain = filterArtworksBySearch();
+
+useEffect(() => {
+
+  //console.log("arrayArtworks <Obras/>", arrayArtworks)
+
+  setObrasFiltradas(obrasFiltroMain)
+
+}, [obrasFiltroMain.length])
+
+
 
 const finalArtworksFiltered = arrayArtworks.filter((obra)=>{
 
@@ -159,9 +271,9 @@ const finalArtworksFiltered = arrayArtworks.filter((obra)=>{
 
 //console.log("slideorsearch <Home>", sliderorsearch)
 
-let filterArtworks;
 
-if(sliderorsearch === "search"){
+
+/* if(sliderorsearch === "search"){
 
   filterArtworks = finalArtworksFiltered.filter((obra) => {
 
@@ -192,9 +304,31 @@ else if(sliderorsearch === "slider") {
 
     } })
 
-}
+} */
 
-  console.log("Filtered Data <Obras/>", filterArtworks);
+
+
+
+/* else if(sliderorsearch === "slider") {
+
+  filterArtworks = finalArtworksFiltered.filter((obra) => {
+
+    if (scoresearch === 0) {
+
+        return obra;
+    }
+  
+    else if(obra.score === scoresearch){  
+      
+      return obra;
+
+    } })
+
+}
+ */
+
+
+  
 /*
   console.log("Obras array en <Obras/>", finalArtworksFiltered);
 
@@ -205,9 +339,10 @@ else if(sliderorsearch === "slider") {
             
         { iscurator ? 
 
-          filterArtworks &&
+            obrasFiltradas &&
 
-            filterArtworks.map((obra)=>{
+                <p>Working on artworks</p>
+/*             filterArtworks.map((obra)=>{
                   return(
   
                       <>
@@ -215,8 +350,7 @@ else if(sliderorsearch === "slider") {
                       style={{ 
                         backgroundImage: `url("${ obra.imgurl }")` 
                       }}
-                      onMouseEnter={() => setIsShown(true)}
-                      onMouseLeave={() => setIsShown(false)}
+
                       >  { isShown &&             
                         <div className="h-screen pt-72">
                             
@@ -242,7 +376,7 @@ else if(sliderorsearch === "slider") {
                                   year = { obra.year }
                                   value = { obra.value }
                                   
-                                  onMouseEnter={() => setIsShown(false)} />
+                                 />
                                   <hr style={{
                                         backgroundColor: "white",
                                         height: 1,
@@ -259,9 +393,9 @@ else if(sliderorsearch === "slider") {
                       
   
                       </>
-                  )})
+                  )}) */
 
-            :
+                :
 
                 obrasVisualizacion.map((obra) =>{
 
@@ -274,8 +408,7 @@ else if(sliderorsearch === "slider") {
                     style={{ 
                       backgroundImage: `url("${ obra.imgurl }")` 
                     }}
-/*                     onMouseEnter={() => setIsShown(true)}
-                    onMouseLeave={() => setIsShown(false)} */
+
                     >  { isShown &&             
                         <div className="h-fit pt-72 hhd:pt-48 hmd:pt-36 hsm:pt-28">
                           {/*  */}
@@ -293,14 +426,7 @@ else if(sliderorsearch === "slider") {
                                     className="mr-6 ml-6 mt-1"
                                     />
                             </div>
-              {/*                         <div style={{
-                                  width: "475px",
-                                  height: "1000px",
-                                  borderRadius: "15rem 0",
-                                  backgroundColor: "#26A7A3",
-                        }}
-                        className="opacity-100 ml-auto mt-4"
-                        ></div> */}
+
               
                         </div>
                         }
@@ -315,9 +441,7 @@ else if(sliderorsearch === "slider") {
                     return(
                       
                       <div className="shadow overflow-hidden"
-/* 
-                      onMouseEnter={() => setIsShown(true)}
-                      onMouseLeave={() => setIsShown(false)} */
+
                       >
                       <div className="relative">
                       <video className="absolute" autoPlay loop muted src={obra.imgurl} />
@@ -355,8 +479,7 @@ else if(sliderorsearch === "slider") {
                       style={{ 
                         backgroundImage: `url(https://firebasestorage.googleapis.com/v0/b/bienal-barco-02.appspot.com/o/errors%2FerrorBarcoVideo.png?alt=media&token=e097dbf7-26b4-403a-9f4c-2d2d402edf21)` 
                       }}
-  /*                     onMouseEnter={() => setIsShown(true)}
-                      onMouseLeave={() => setIsShown(false)} */
+
                       >  { isShown &&             
                           <div className="h-fit pt-72 hhd:pt-48 hmd:pt-36 hsm:pt-28">
                             {/*  */}
@@ -374,14 +497,7 @@ else if(sliderorsearch === "slider") {
                                       className="mr-6 ml-6 mt-1"
                                       />
                               </div>
-                {/*                         <div style={{
-                                    width: "475px",
-                                    height: "1000px",
-                                    borderRadius: "15rem 0",
-                                    backgroundColor: "#26A7A3",
-                          }}
-                          className="opacity-100 ml-auto mt-4"
-                          ></div> */}
+
                 
                           </div>
                           }
@@ -392,34 +508,6 @@ else if(sliderorsearch === "slider") {
                       </>)
   
                     }
-
-
-
-
-                  
-                /* console.log("Obra", obra);*/
-
-                //let fileType = getFileType(obra);
-
-/*                 return(
-                  {
-                  mediaElement
-                  }
-
-                ) */
-
-
-                //console.log(`Media Type ${obra.title}`, mediaElement);
-
-/*                 if (mediaType.includes("image/")) {
-                  return <img src={`${obra.imgurl}`}></img>
-                } else if (mediaType.includes("video/")) {
-                  return <video src={`${obra.imgurl}`} controls>
-                  Your browser does not support the video tag.
-                </video>
-                } else {
-                  return <div>Unsupported file type</div>;
-                } */
                 
                })
 
