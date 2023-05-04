@@ -31,7 +31,7 @@ const CustomSlider = styled(Slider)(({ theme }) => ({
 
 
 
-const QualificationModal = ({ artwork, artistName, imgurl, description, dimensions, peso,  technique, edition, year, value, email, scoreFirebase, artistcv, artistsemblance, projectdescription, artistex }) => {
+const QualificationModal = ({ artwork, artistName, imgurl, description, dimensions, peso,  technique, edition, year, value, email, scoreFirebase, artistcv, artistsemblance, projectdescription, artistex, title, address, estado }) => {
 
   const [showModal, setShowModal] = useState(false);
 
@@ -43,7 +43,11 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
 
   const navigate = useNavigate();
 
-  const [score, setScore] = useState(scoreFirebase);
+
+  const [score, setScore] = useState(0);
+
+
+  
 
   const [ techArtwork, settechArtwork] = useState(true);
 
@@ -77,13 +81,28 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
 
     }
 
+    if(scoreFirebase){
+
+      setScore(scoreFirebase)
+
+    } else if (!scoreFirebase){
+
+      setScore(0)
+
+    }
+
     fetchFirebase();      
+
 
   },[])
 
-  const updateScore = async()=>{
+  //console.log("score from <Qualification />", score)
+
+/*   const updateScore = async()=>{
 
     const artworksRef = doc(firestore, `users/${email}`);
+
+    console.log("artwork", artwork)
 
     var val = artwork;
 
@@ -93,7 +112,7 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
 
       if(item.title === val){
 
-        artworks[i].score = score;
+        artworks[i] = { ...artworks, score: score}
 
         console.log("Nuevo score del artwork", artworks[i]);
 
@@ -108,7 +127,7 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
       
       window.location.reload(false);
 
-  }
+  } */
 
   const handleSlider = (e)=>{
 
@@ -150,6 +169,43 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
     })
   }
 
+  const updateScore = async () => {
+
+    
+    const artworksRef = doc(firestore, `users/${email}`);
+    //const querySnapshot = await getDocs(artworksRef);
+    const userDoc = await getDoc(artworksRef); // Assuming there is only one document
+
+
+    if (!userDoc.exists()) {
+      console.log(`Document with email "${email}" does not exist`);
+    } else {
+      const data = userDoc.data();
+      console.log("userDoc", data);
+
+      const updatedArtworks = data.artworks.map(artwork => {
+        if (artwork.title === title) {
+          console.log(`El titulo ${artwork.title} es igual a `, title)
+          return {
+            ...artwork,
+            score: score
+          };
+        } else {
+          return artwork;
+        }
+      });
+
+      await updateDoc(artworksRef, { artworks: updatedArtworks });
+
+      setScore(0)
+
+      window.location.reload(false);
+      
+
+    }
+    
+  };
+
 
   return (
     <>
@@ -173,8 +229,9 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
               <div className="border-2 border-black rounded-lg shadow-lg relative flex flex-col w-full bg-teal-400 outline-none focus:outline-none">
                 <div className="flex flex-col items-start justify-between p-5 border-b border-solid border-black rounded-t ">
 
-                <h3 className="text-3xl text-black font-semibold">{ artwork }</h3>
+                <h3 className="text-3xl text-black font-semibold">{ title }</h3>
                   <h2 className="text-xl text-black">{ artistName }</h2>
+
 
                 </div>
 
@@ -197,29 +254,51 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
                 
                 </div>
 
-                <div className="flex flex-row">
+                <div className="flex flex-row gap-2">
 
                     <p className="text-black font-bold pt-3 text-sm">Artist's Docs:</p>
 
-                    <p className="text-black pt-3 pl-2 text-sm">Artwork</p>
-                    <a href={ imgurl } rel="noreferrer" target="_blank"><BsDownload className="text-black pt-3 text-3xl" /></a>
+                    <a className="text-black pt-3 pl-2 text-sm hover:text-gray-400" href={ imgurl } rel="noreferrer" target="_blank">{/* <BsDownload className="text-black pt-3 text-3xl hover:text-gray-400" /> */"Artwork"}</a>
 
-                    <p className="text-black pt-3 pl-1 text-sm">| CV</p>
-                    <a href={ artistcv } rel="noreferrer" target="_blank"><GrDocumentDownload  className="text-black pt-3 text-3xl" /></a> 
+                    <p className="text-black pt-3 text-sm">|</p>
 
-                    <p className="text-black pt-3 pl-1 text-sm">| Semblance</p>
-                    <a href={ artistsemblance } rel="noreferrer" target="_blank"><GrDocumentDownload  className="text-black pt-3 text-3xl" /></a> 
+                    <a className="text-black pt-3 text-sm hover:text-gray-400" href={ artistcv } rel="noreferrer" target="_blank">{/* <GrDocumentDownload  className="text-black pt-3 text-3xl hover:text-gray-400" /> */}CV</a> 
 
-                    <p className="text-black pl-1 pt-3 text-sm">| Project</p>
-                    <a href={ projectdescription } rel="noreferrer" target="_blank"><GrDocumentDownload  className="text-black pt-3 text-3xl" /></a>   
+                    <p className="text-black pt-3 text-sm">|</p>
+
+                    <a className="text-black pt-3 text-sm hover:text-gray-400" href={ artistsemblance } rel="noreferrer" target="_blank">{/* <GrDocumentDownload  className="text-black pt-3 text-3xl hover:text-gray-400" /> */}Semblance</a> 
+
+                    <p className="text-black pt-3 text-sm">|</p>
+
+                    <a className="text-black pt-3 text-sm hover:text-gray-400" href={ projectdescription } rel="noreferrer" target="_blank">{/* <GrDocumentDownload  className="text-black pt-3 text-3xl hover:text-gray-400" /> */}Project</a>   
                     
-                    <p className="text-black pt-3 pl-1 text-sm">| Exhibitions</p>
-                    <GrDocumentDownload  onClick={handleZipDownload} className="text-black pt-3 text-3xl cursor-pointer" />
+
+                    {/* <GrDocumentDownload  onClick={handleZipDownload} className="text-black pt-3 text-3xl cursor-pointer" /> */}
 
                 </div>
 
+                { artistex && 
+
+                <div className="flex flex-row flex-wrap gap-2">
+                <p className="text-black pt-3 text-sm">Exhibitions</p>
+
+                {
+                artistex.map((obra, i)=>{
+
+                  return <a className="text-black pt-3 text-sm hover:text-gray-400" href={ obra } rel="noreferrer" target="_blank">{i + 1}</a>
+
+                })
+
+              }
+                </div>
+                
+                
+                }
+                
+
+
                 <h3 className="mt-3 text-black tracking-[.25em]">DESCRIPTION</h3>
-                <p className="text-black pt-3">{ description }</p>
+                <p className="text-black pt-3 overflow-auto h-28">{ description }</p>
                   <div className="flex flex-row">
                       <div className="flex flex-col">
                       <h3 className="mt-6 text-black tracking-[.25em]"><span className="font-bold">TYPE</span> IMG/JPG</h3>

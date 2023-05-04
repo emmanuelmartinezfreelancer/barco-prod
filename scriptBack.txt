@@ -228,3 +228,39 @@ else if(sliderorsearch === "slider") {
     } })
 
 }
+
+///////////////////////////////
+
+/*   const updateScore = async () => {
+
+    
+    const artworksRef = doc(firestore, `users/${email}`);
+    //const querySnapshot = await getDocs(artworksRef);
+    const userDoc = await getDoc(artworksRef); // Assuming there is only one document
+
+
+    if (!userDoc.exists()) {
+      console.log(`Document with email "${email}" does not exist`);
+    } else {
+      const data = userDoc.data();
+      console.log("userDoc", data);
+
+      const updatedArtworks = data.artworks.map(artwork => {
+        if (artwork.title === title) {
+          console.log(`El titulo ${artwork.title} es igual a `, title)
+          return {
+            ...artwork,
+            score: score
+          };
+        } else {
+          return artwork;
+        }
+      });
+
+      await updateDoc(artworksRef, { artworks: updatedArtworks });
+      
+
+    }
+    
+  };
+ */

@@ -8,7 +8,7 @@ import { getStorage, ref, getMetadata, child } from "firebase/storage";
 
 const firestore = getFirestore(app); 
 
-export default function Obras({obras, artistname, email, iscurator, cvURL, semblanceURL, projectURL, artistex, searchtext, scoresearch, sliderorsearch}) {
+export default function Obras({obras, artistname, email, iscurator, cvURL, semblanceURL, projectURL, artistex, searchtext, scoresearch, sliderorsearch, setnumeroObras, setnumeroObrasFilt }) {
 
 const [isShown, setIsShown] = useState(true);
 const [userMail, setuserMail] = useState(email);
@@ -18,11 +18,7 @@ const [curatorview, setcuratorView] = useState(iscurator);
 
 const [obrasVisualizacion, setobrasVisualizacion] = useState([]);
 
-
-
-
-
- //console.log("Obras desde componente <Obras>", obras);
+ //console.log("Obras desde componente <Obras>", obrasVisualizacion);
 
  const getArtworks = async () => {
 
@@ -32,7 +28,7 @@ const [obrasVisualizacion, setobrasVisualizacion] = useState([]);
 
     let fileType = await getFileType(obras[i]);
 
-    console.log("fileType", fileType);
+    //console.log("fileType", fileType);
 
     if (fileType === "image"){
 
@@ -64,7 +60,7 @@ useEffect(()=>{
   })
 
   
-},[obrasVisualizacion.length])
+},[obrasVisualizacion.length, sliderorsearch])
 
 
 
@@ -180,15 +176,18 @@ const arrayArtworks = obras.map((artista)=>{
 
 const [obrasFiltradas, setObrasFiltradas] = useState(arrayArtworks);
 
+console.log("obrasFiltradas <Obras/>", obrasFiltradas)
 
 const filterArtworksBySearch = () => {
 
-  let filterArtworks = [];
-
   let obrasFilter = []; 
 
+  setnumeroObrasFilt(obrasFiltradas.length);
+
   if(sliderorsearch === "search"){
- 
+    
+    //console.log("search")
+
     arrayArtworks.map((artista)=>{
   
        return artista.artworks.map((obra) => {
@@ -208,9 +207,8 @@ const filterArtworksBySearch = () => {
   
             //console.log("obrasFiltradas <Obras/>", obrasFilter)
 
-            let artist = artista;
   
-            obrasFilter.push({...artista, artworks: obra})
+            obrasFilter.push({...artista, artworks: {...obra, score: 0}})
       
             return artista;
       
@@ -218,23 +216,79 @@ const filterArtworksBySearch = () => {
   
         } else {
   
-            console.log("Artista from arrayArtworks <Obras/>", artista.artistname, "Obras undefined")
+            //console.log("Artista from arrayArtworks <Obras/>", artista.artistname, "Obras undefined")
             return ""
         }
     })
   
     })
+  } else if(sliderorsearch === "slider") {
+
+    //console.log("slider")
+    let obrasParaHome = [];
+
+    arrayArtworks.map((artista) => {
+
+      return artista.artworks.map((obra)=>{
+        
+        obrasParaHome.push(obra);
+
+        if(obra.score){
+
+        if (scoresearch === 0) {
+
+          obrasFilter = [];
+          console.log("scoresearch === 0", scoresearch)
+          
+          return artista;
+
+      } else if(obra.score === scoresearch){  
+
+        //console.log("obra.score === scoresearch", obra)
+        let obraPPush = []
+        obraPPush.push({...obra, score: obra.score})
+
+        obrasFilter.push({...artista, artworks: obraPPush})
+
+        //console.log("obrasFilter", obrasFilter)
+
+        return artista;
+
+      } else {
+  
+        //console.log("Artista from arrayArtworks <Obras/>", artista.artistname, "Obras undefined")
+        //obrasFilter.push({...artista, artworks: []})
+
+        return ""
+        }
+      } 
+
+      setnumeroObras(obrasParaHome.length);
+
+      })
+  
+/*       
     
+ */ 
+    
+      //console.log("obra from map, arrayArtworks <Obras/>", artista)
+      
+    })
   
   }
 
   if(obrasFilter.length > 0){
 
+
     return obrasFilter
 
+  }/*  else if(scoresearch === 0 && searchtext === ""){
 
-  } else{
+    return arrayArtworks
 
+  } */else {
+
+    
     obrasFilter = [];
 
     obrasFilter.push(arrayArtworks)
@@ -242,10 +296,12 @@ const filterArtworksBySearch = () => {
     return obrasFilter.flat()
 
   }
+
+
   
 }
 
-console.log("filterArtworks <Obras/> useEffect", obrasFiltradas)
+//console.log("filterArtworks <Obras/> useEffect", obrasFiltradas)
 
 let obrasFiltroMain = filterArtworksBySearch();
 
@@ -341,10 +397,19 @@ else if(sliderorsearch === "slider") {
 
             obrasFiltradas &&
 
-                <p>Working on artworks</p>
-/*             filterArtworks.map((obra)=>{
-                  return(
-  
+            obrasFiltradas.map((artista) =>{
+
+              return(
+              <>
+              {
+                searchtext === '' && artista ?
+                  (
+                   artista.artworks && Array.isArray(artista.artworks) ?
+
+                   artista.artworks.map((obra)=>{
+
+                    return (
+
                       <>
                       <div className="shadow overflow-hidden md:w-[50px] tablet:w-[410px] h-full bg-cover bg-center"
                       style={{ 
@@ -352,40 +417,44 @@ else if(sliderorsearch === "slider") {
                       }}
 
                       >  { isShown &&             
-                        <div className="h-screen pt-72">
+                          <div className="h-fit pt-72 hhd:pt-48 hmd:pt-36 hsm:pt-14">
                             
-                        <div className="z-10 flex flex-col pt-56 pl-4 rounded-l-[15rem] bg-[#26A7A3] h-[1000px] bg-opacity-50">
-
-                          <p className="text-white font-bold text-right pr-6 uppercase text-xl">{ obra.title }</p>
-                          <p className="text-white text-right uppercase pr-6 text-lg">{ "artista.artistname" }</p>
-                          <QualificationModal className="ml-auto" 
-                                  artwork ={ obra.title }
-                                  description={ obra.description }
-                                  dimensions={ obra.widtheight}
-                                  peso={ obra.weight }
-                                  artistName= { "artista.artistname" }
-                                  imgurl= {obra.imgurl }
-                                  email= {"artista.email"}
-                                  scoreFirebase={ obra.score }
-                                  artistcv={ "artista.cv" }
-                                  artistsemblance={ "artista.semblance" }
-                                  projectdescription={ "artista.project" }
-                                  artistex= { "artista.exhibitions" }
-                                  technique = { obra.technique }
-                                  edition = { obra.edition }
-                                  year = { obra.year }
-                                  value = { obra.value }
-                                  
-                                 />
-                                  <hr style={{
-                                        backgroundColor: "white",
-                                        height: 1,
-                                        borderStyle: "none"
-                                  }} 
-                                  className="mr-6 ml-6 mt-1"
-                                  />
-                          <p className="ml-6 mt-1 text-white text-left pr-6 text-lg"><span className="font-bold">Score</span> { "obra.score" }</p>
-                          </div>
+                            <div className="z-10 flex flex-col pt-56 pl-4 rounded-l-[15rem] bg-[#26A7A3] h-[1000px] bg-opacity-50">
+  
+                              <p className="text-white font-bold text-right pr-6 uppercase text-xl tablet:text-base hd:text-lg lg:text-xl truncate ...">{ obra.title }</p>
+                              <p className="text-white text-right uppercase pr-6 text-lg">{ artista.artistname }</p>
+                              <QualificationModal className="ml-auto" 
+                                      title ={ obra.title }
+                                      description={ obra.description }
+                                      dimensions={ obra.widtheight}
+                                      peso={ obra.weight }
+                                      artistName= { artista.artistname }
+                                      imgurl= {obra.imgurl }
+                                      email= {artista.email}
+                                      scoreFirebase={ obra.score }
+                                      artistcv={ artista.cv }
+                                      artistsemblance={ artista.semblance }
+                                      projectdescription={ artista.project }
+                                      artistex= { artista.exhibitions }
+                                      technique = { obra.technique }
+                                      edition = { obra.edition }
+                                      year = { obra.year }
+                                      value = { obra.value }
+                                      artworkcomplete = { obra }
+                                      address = { artista.address }
+                                      estado = { artista.state }
+                                      
+                                      onMouseEnter={() => setIsShown(false)} />
+                                      <hr style={{
+                                            backgroundColor: "white",
+                                            height: 1,
+                                            borderStyle: "none"
+                                      }} 
+                                      className="mr-6 ml-6 mt-1"
+                                      />
+                              <p className="ml-6 mt-1 text-white text-left pr-6 text-lg"><span className="font-bold">Score</span> { obra.score }</p>
+                              </div>
+  
                           </div>
                           }
                       </div>
@@ -393,7 +462,93 @@ else if(sliderorsearch === "slider") {
                       
   
                       </>
-                  )}) */
+
+
+
+
+
+                    )
+
+
+                   })
+
+                   :
+
+                   <p>Loading profile...</p>
+
+
+                   )
+
+
+                : 
+                
+                searchtext !== '' && artista ?
+
+
+                    <>
+                    <div className="shadow overflow-hidden md:w-[50px] tablet:w-[410px] h-full bg-cover bg-center"
+                    style={{ 
+                      backgroundImage: `url("${ artista.artworks.imgurl }")` 
+                    }}
+
+                    >  { isShown &&             
+                        <div className="h-fit pt-72 hhd:pt-48 hmd:pt-36 hsm:pt-24">
+                          
+                          <div className="z-10 flex flex-col pt-56 pl-4 rounded-l-[15rem] bg-[#26A7A3] h-[1000px] bg-opacity-50">
+
+                            <p className="text-white font-bold text-right pr-6 uppercase text-xl tablet:text-base hd:text-lg lg:text-xl truncate ...">{ artista.artworks.title }</p>
+                            <p className="text-white text-right uppercase pr-6 text-lg">{ artista.artistname }</p>
+                            <QualificationModal className="ml-auto" 
+                                    title ={ artista.artworks.title }
+                                    description={ artista.artworks.description }
+                                    dimensions={ artista.artworks.widtheight}
+                                    peso={ artista.artworks.weight }
+                                    artistName= { artista.artistname }
+                                    imgurl= {artista.artworks.imgurl }
+                                    email= {artista.artworks.email}
+                                    scoreFirebase={ artista.artworks.score }
+                                    artistcv={ artista.artworks.cv }
+                                    artistsemblance={ artista.artworks.semblance }
+                                    projectdescription={ artista.artworks.project }
+                                    artistex= { artista.artworks.exhibitions }
+                                    technique = { artista.artworks.technique }
+                                    edition = { artista.artworks.edition }
+                                    year = { artista.artworks.year }
+                                    value = { artista.artworks.value }
+                                    artworkcomplete = { artista.artworks }
+                                    address = { artista.address }
+                                    estado = { artista.state }
+                                    
+                                    onMouseEnter={() => setIsShown(false)} />
+                                    <hr style={{
+                                          backgroundColor: "white",
+                                          height: 1,
+                                          borderStyle: "none"
+                                    }} 
+                                    className="mr-6 ml-6 mt-1"
+                                    />
+                            <p className="ml-6 mt-1 text-white text-left pr-6 text-lg"><span className="font-bold">Score</span> { artista.artworks.score }</p>
+                            </div>
+
+                        </div>
+                        }
+                    </div>
+
+                    
+
+                    </>
+
+
+                :
+                
+                <p>Loading profile...</p>
+  
+              }
+              </>
+  
+              )
+  
+            }) 
 
                 :
 

@@ -18,7 +18,7 @@ export function LoginAdmin() {
     setError("");
     try {
       await login(user.email, user.password);
-      navigate("/send-mail");
+      navigate("/");
     } catch (error) {
         if (error.code === "auth/internal-error"){
                 

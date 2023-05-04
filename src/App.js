@@ -22,12 +22,12 @@ function App() {
           <Route
             path="/"
             element={
-              <ProtectedRoute>
+              <ProtectedRouteAdmin>
                 <Home />
-              </ProtectedRoute>
+              </ProtectedRouteAdmin>
             }
           />
-{/*           <Route path="/register" element={<Register />} /> */}
+       <Route path="/register" element={<Register />} />
           <Route path="/upload" element={<NewUploadArtwork />} />
           <Route path="/profile" element={
               <ProtectedRoute>
