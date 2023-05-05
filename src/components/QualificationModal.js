@@ -231,7 +231,7 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
 
                 <h3 className="text-3xl text-black font-semibold">{ title }</h3>
                   <h2 className="text-xl text-black">{ artistName }</h2>
-
+                  <h2 className="text-base text-black">{ email }</h2>
 
                 </div>
 
