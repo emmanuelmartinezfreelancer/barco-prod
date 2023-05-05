@@ -526,6 +526,7 @@ else if(sliderorsearch === "slider") {
                                           borderStyle: "none"
                                     }} 
                                     className="mr-6 ml-6 mt-1"
+                                    
                                     />
                             <p className="ml-6 mt-1 text-white text-left pr-6 text-lg"><span className="font-bold">Score</span> { artista.artworks.score }</p>
                             </div>

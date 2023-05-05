@@ -46,10 +46,9 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
 
   const [score, setScore] = useState(0);
 
-
-  
-
   const [ techArtwork, settechArtwork] = useState(true);
+
+  const [ fileFinalType, setfileFinalType] = useState('');
 
   const searchOrCreateDocument = async(idDocumento)=>{
   
@@ -95,6 +94,29 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
 
 
   },[])
+
+  const getFileType = async (obra) => {
+
+    let fileType;
+  
+    const response = await fetch(obra);
+    const blob = await response.blob();
+    const blobType = blob.type;
+
+    console.log("Blob", blob)
+  
+    if (blobType.startsWith("image/")) {
+      fileType = "image";
+    } else if (blobType.startsWith("video/")) {
+      fileType = "video";
+    } else {
+      fileType="unknown"
+    }
+  
+    return fileType;
+    
+  }
+  
 
   //console.log("score from <Qualification />", score)
 
@@ -214,7 +236,13 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
       <button
         className="ml-auto pr-6 text-3xl bg-transparent text-white font-bold outline-none focus:outline-none"
         type="button"
-        onClick={() => setShowModal(true)}
+        onClick={async() => {
+
+          setShowModal(true)
+          let fileType = await getFileType(imgurl);
+          setfileFinalType(fileType);    
+          console.log("FileType asset", fileType)
+        }}
       >
         <AiOutlineEye className="mt-6" />
       </button>
@@ -301,7 +329,7 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
                 <p className="text-black pt-3 overflow-auto h-28">{ description }</p>
                   <div className="flex flex-row">
                       <div className="flex flex-col">
-                      <h3 className="mt-6 text-black tracking-[.25em]"><span className="font-bold">TYPE</span> IMG/JPG</h3>
+                      <h3 className="mt-6 text-black tracking-[.25em]"><span className="font-bold">TYPE</span> {fileFinalType}</h3>
                   
                         <p className="text-black"><span className="font-bold">Dimensions: </span>{ dimensions} <span className="font-bold">Weight</span> {peso}</p>
                       </div>
@@ -341,9 +369,41 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
             </div>
           </div>
 
-          <div className="w-1/2 h-full p-14">
-
+          <div className="w-1/2 h-full p-14 flex justify-center align-center">
+          
+          { fileFinalType === '' &&
+          
+          <p className="font-bold text-center my-auto align-center">Reviewing the file type, if the file is very large (for example, a video in High Quality) or you're downloading all the resources from the app and takes a long time, you can download it directly by clicking on Artwork in Artist's Docs.</p>                
+          
+          }
+          
+          { fileFinalType === 'image' &&
+          
           <img src={`${imgurl}`} alt={`${imgurl}`} className="h-full w-full object-cover"/>
+
+          }
+
+          { fileFinalType === 'video' &&
+          
+          <video controls>
+          <source src={`${imgurl}`} />
+          Your browser does not support the video tag.
+          </video>
+
+          }
+
+          { fileFinalType === 'unknown' &&
+          
+          <p className="font-bold text-center my-auto">File type not image or video, please download it directly by clicking on Artwork in Artist's Docs.</p>                
+
+
+          }
+
+
+          
+
+
+
             
           </div>
 

@@ -403,13 +403,14 @@ export function Home(){
       </div>
       }  */}
 
-      {curatorview &&
+
+{/*       {curatorview &&
               <div className="flex flex-row fixed w-full h-[30px] mt-16 z-50 ">
 
               <input onClick={()=>{setsliderorSearch("search")}} onChange={(e)=>{ setSearch(e.target.value); console.log("Search input", e.target.value)}} type="text" className="ml-auto rounded-xl border-teal-400 border-2 w-1/2 mr-8 text-right pr-8 bg-transparent" placeHolder="Search by artwork title..." />
              
            </div>
-      }
+      } */}
     
     <div className="flex sm:flex-col md:flex-row md:flex-nowrap tablet:pt-3 lg:pt-12 w-full">
 

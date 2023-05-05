@@ -7,7 +7,7 @@ export function ProtectedRouteAdmin({children}){
 
     if (loading) return <h1>Loading</h1>
     if (!user) return <Navigate to='/login' />
-    if (user.email === "vela.freelancer@gmail.com" || user.email === "bianca@cutoutfest.com" || user.email === "tobiasostrander@gmail.com") {
+    if (user.email === "vela.freelancer@gmail.com" || user.email === "bianca@cutoutfest.com" || user.email === "tobiasostrander@gmail.com" || "oscarascencioc@hotmail.com") {
         
         console.log("Authorized")
 
