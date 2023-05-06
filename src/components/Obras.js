@@ -23,15 +23,57 @@ const [obrasVisualizacion, setobrasVisualizacion] = useState([]);
  const [startIndex, setStartIndex] = useState(0);
 
  const handleNext = () => {
-  setStartIndex(startIndex + 10);
+  setStartIndex(startIndex + 5);
 
 };
 
 const handlePrev = () => {
-  setStartIndex(startIndex - 10);
+  setStartIndex(startIndex - 5);
 
 };
 
+const countSegmentsOfTen = (arr) => {
+  const segments = [];
+  for (let i = 0; i < arr.length; i += 25) {
+    if (i + 24 < arr.length) {
+      segments.push(i / 25 + 1);
+    }
+  }
+  return segments;
+};
+
+const handleClick = (segmentNumber) => {
+
+  //console.log("Segment clicked:", segmentNumber);
+
+  if(segmentNumber === 1){
+
+    setStartIndex(0);
+
+  } else if(segmentNumber === 2){
+
+    setStartIndex(50);
+
+  }
+
+  else if(segmentNumber === 3){
+
+    setStartIndex(100);
+
+  }
+
+  else if(segmentNumber === 4){
+
+    setStartIndex(150);
+
+  }
+
+
+};
+
+const segmentNumbers = countSegmentsOfTen(obras);
+
+//console.log("SegmentNumbers", segmentNumbers);
 
  const getArtworks = async () => {
 
@@ -165,7 +207,7 @@ const arrayArtworksAll = obras.map((artista)=>{
   
   } else {
 
-      console.log("Artista from arrayArtworks <Obras/>", artista.artistname, "No tiene obras")
+      //console.log("Artista from arrayArtworks <Obras/>", artista.artistname, "No tiene obras")
 
   }
 
@@ -188,11 +230,11 @@ const arrayArtworksAll = obras.map((artista)=>{
 })
 //.flat()
 
- let artworksSlice = arrayArtworksAll.slice(startIndex, startIndex + 10);
+ let artworksSlice = arrayArtworksAll.slice(startIndex, startIndex + 5);
 
 let arrayArtworks = arrayArtworksAll;
 
-console.log("artworksSlice", artworksSlice)
+//console.log("artworksSlice", artworksSlice)
 
 useEffect(()=>{
 
@@ -708,17 +750,117 @@ else if(sliderorsearch === "slider") {
                 
                })
 
-              }
+        }
               
-              {startIndex + 10 < obras.length && (
+        { startIndex + 5 < obras.length && (
               <button 
               className="text-4xl w-[40px] text-white bg-black shadow-black shadow-xl bg-opacity-100 fixed h-full right-0 top-0"
               onClick={handleNext}
               >
               {">"}
               </button>
-              )}
+              
+        )}
 
-              </>
+        {iscurator &&
+        
+        
+        <div className="w-full flex flex-row gap-2 text-teal-400 fixed bottom-0 pb-6">
+              {segmentNumbers.map((number) => (
+              <span className="tex-teal-400 cursor-pointer hover:text-gray-400" key={number} 
+              
+              onClick={ () => {
+
+                switch(number){
+                  case 1:
+                    setStartIndex(0)
+                    break;
+                  case 2:
+                    setStartIndex(25)
+                    break;
+                  case 3:
+                    setStartIndex(50)
+                    break;
+                  case 4:
+                    setStartIndex(75)
+                    break;
+                  case 5:
+                    setStartIndex(100)
+                    break;
+                  case 6:
+                    setStartIndex(125)
+                    break;
+                  case 7:
+                    setStartIndex(150)
+                  break;
+                  case 8:
+                    setStartIndex(175)
+                  break;
+                  case 9:
+                    setStartIndex(200)
+                  break;
+                  case 10:
+                    setStartIndex(225)
+                  break;
+                  case 11:
+                    setStartIndex(250)
+                  break;
+                  case 12:
+                    setStartIndex(275)
+                  break;
+                  case 13:
+                    setStartIndex(300)
+                  break;
+                  case 14:
+                    setStartIndex(350)
+                  break;
+                  case 15:
+                    setStartIndex(375)
+                  break;
+                  case 16:
+                    setStartIndex(400)
+                  break;
+                  case 17:
+                    setStartIndex(425)
+                  break;
+                  case 18:
+                    setStartIndex(450)
+                  break;
+                  case 19:
+                    setStartIndex(475)
+                  break;
+                  case 20:
+                    setStartIndex(500)
+                  break;
+                  case 21:
+                    setStartIndex(525)
+                  break;
+                  case 22:
+                    setStartIndex(550)
+                  break;
+                  case 23:
+                    setStartIndex(575)
+                  break;
+                    default:
+                      setStartIndex(0)
+                }
+                
+                //handleClick(number)
+              
+              }
+                }>
+              {number}
+              </span>         
+              ))}
+              </div>
+        }
+
+
+
+
+              
+
+
+        </>
         )
 }
