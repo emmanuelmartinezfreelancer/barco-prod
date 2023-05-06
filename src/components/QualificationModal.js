@@ -255,7 +255,7 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
           <div className="flex justify-center items-center outline-none focus:outline-none w-1/2 px-12">        
               <div className="border-2 border-black rounded-lg shadow-lg relative flex flex-col w-full bg-teal-400 outline-none focus:outline-none pt-3 px-6">
                 
-              <h3 className="text-2xl text-black font-semibold border-b border-solid border-black pb-1">{ title }</h3>
+              <h3 className="text-2xl text-black font-semibold border-b border-solid border-black py-1">{ title }</h3>
                 <div className="flex flex-row gap-6 w-full pt-1">
                   
                 <div className="flex flex-col ">
@@ -263,12 +263,14 @@ const QualificationModal = ({ artwork, artistName, imgurl, description, dimensio
 
                   <h2 className="text-xl text-black">{ artistName }</h2>
                   <h2 className="text-base text-black">{ email }</h2>
+                  <p className="text-base text-black font-light">{address}</p>
+{/*                   <p className="text-base text-black font-light">{estado}</p> */}
 
                 </div>
 
                 <div className="flex flex-col text-black">
 
-                      <p><span className="font-bold uppercase text-sm">Technique</span> { technique }</p>
+                      <p className="overflow-auto h-[50px] scrollbar-thumb-red scrollbar-track-red "><span className="font-bold uppercase text-sm">Technique</span>{" "}{ technique }</p>
 
                       <p><span className="font-bold uppercase text-sm">Editions</span> { edition }</p>
 

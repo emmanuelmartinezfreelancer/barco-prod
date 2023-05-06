@@ -5,6 +5,7 @@ import { useAuth } from "../context/authContext"
 import { app } from '../firebase'
 import { getFirestore, doc, getDocs, collection } from "firebase/firestore"
 import { getStorage, ref, getMetadata, child } from "firebase/storage";
+import { set } from 'firebase/database';
 
 const firestore = getFirestore(app); 
 
@@ -21,6 +22,8 @@ const [obrasVisualizacion, setobrasVisualizacion] = useState([]);
  //console.log("Obras desde componente <Obras>", obrasVisualizacion);
 
  const [startIndex, setStartIndex] = useState(0);
+ const [ sectorRange, setsectorRange ] = useState("1 - 25");
+ const [ sectorNumber, setsectorNumber ] = useState("1");
 
  const handleNext = () => {
   setStartIndex(startIndex + 5);
@@ -42,34 +45,6 @@ const countSegmentsOfTen = (arr) => {
   return segments;
 };
 
-const handleClick = (segmentNumber) => {
-
-  //console.log("Segment clicked:", segmentNumber);
-
-  if(segmentNumber === 1){
-
-    setStartIndex(0);
-
-  } else if(segmentNumber === 2){
-
-    setStartIndex(50);
-
-  }
-
-  else if(segmentNumber === 3){
-
-    setStartIndex(100);
-
-  }
-
-  else if(segmentNumber === 4){
-
-    setStartIndex(150);
-
-  }
-
-
-};
 
 const segmentNumbers = countSegmentsOfTen(obras);
 
@@ -113,6 +88,8 @@ useEffect(()=>{
     setobrasVisualizacion(arrayFinal)
 
   })
+
+  setnumeroObras(artworkCounter)
 
   
 },[obrasVisualizacion.length, sliderorsearch])
@@ -198,43 +175,38 @@ const getFileType = async (obra) => {
   
 }
 
-const arrayArtworksAll = obras.map((artista)=>{
-
-  //console.log("Artista from arrayArtworks <Obras/>", artista);
-
-  if(artista.artworks !== undefined){  
-    return artista 
-  
+const totalArtworksSKU = obras.reduce((total, artista) => {
+  if (artista.artworks !== undefined) {
+    return total + artista.artworks.length;
   } else {
-
-      //console.log("Artista from arrayArtworks <Obras/>", artista.artistname, "No tiene obras")
-
+    return total;
   }
+}, 0);
 
+let artworkCounter = 0;
 
+const arrayArtworksAll = obras.map((artista) => {
+  if (artista.artworks !== undefined) {
+    const artworksWithNumbers = artista.artworks.map((artwork, index) => {
+      artworkCounter++;
+      return { ...artwork, sku: artworkCounter };
+    });
+    return {
+      ...artista,
+      artworks: artworksWithNumbers,
+      totalArtworks: totalArtworksSKU
+    };
+  } else {
+    return artista;
+  }
+});
 
-
- 
-/*   artista.artworks.filter((obra)=>{
-
-    if (obra !== "\"\""){
-  
-      return artista
-  
-    }
-  
-  }) */
-  
-  //return artista.artworks
-
-})
-//.flat()
 
  let artworksSlice = arrayArtworksAll.slice(startIndex, startIndex + 5);
 
 let arrayArtworks = arrayArtworksAll;
 
-//console.log("artworksSlice", artworksSlice)
+console.log("artworksSlice", artworksSlice)
 
 useEffect(()=>{
 
@@ -334,7 +306,7 @@ const filterArtworksBySearch = () => {
         }
       } 
 
-      setnumeroObras(obrasParaHome.length);
+      //setnumeroObras(obrasParaHome.length);
 
       })
   
@@ -468,7 +440,7 @@ else if(sliderorsearch === "slider") {
             
         { iscurator ? 
 
-            artworksSlice && artworksSlice.map((artista) =>{
+            artworksSlice && artworksSlice.map((artista, i) =>{
 
               return(
               <>
@@ -492,10 +464,10 @@ else if(sliderorsearch === "slider") {
                       }}
 
                       >  { isShown &&             
-                          <div className="h-fit pt-72 hhd:pt-48 hmd:pt-36 hsm:pt-14">
-                            
+                          <div className="h-fit pt-72 hhd:pt-48 hmd:pt-36 hsm:pt-3">
+                            <p className="w-2/6 text-white font-bold uppercase text-xl bg-black py-1 pl-2">SKU{" "}<span className="text-teal-400">{obra.sku}</span> </p>
                             <div className="z-10 flex flex-col pt-56 pl-4 rounded-l-[15rem] bg-[#26A7A3] h-[1000px] bg-opacity-50">
-  
+
                               <p className="text-white font-bold text-right pr-6 uppercase text-xl tablet:text-base hd:text-lg lg:text-xl truncate ...">{ obra.title }</p>
                               <p className="text-white text-right uppercase pr-6 text-lg">{ artista.artistname }</p>
                               <QualificationModal className="ml-auto" 
@@ -763,9 +735,10 @@ else if(sliderorsearch === "slider") {
         )}
 
         {iscurator &&
-        
-        
-        <div className="w-full flex flex-row gap-2 text-teal-400 fixed bottom-0 pb-6">
+        <>
+        <p className="w-full text-teal-400 fixed bottom-0 pb-10 text-xl font-bold">Sector {sectorNumber}{" "}<span className="font-light">{sectorRange}{" range of artists, not artworks"}</span></p>
+        <div className="w-full flex flex-row gap-2 text-teal-400 fixed bottom-0 pb-3">
+
               {segmentNumbers.map((number) => (
               <span className="tex-teal-400 cursor-pointer hover:text-gray-400" key={number} 
               
@@ -774,72 +747,119 @@ else if(sliderorsearch === "slider") {
                 switch(number){
                   case 1:
                     setStartIndex(0)
+                    setsectorRange("1 - 25")
+                    setsectorNumber(1)
                     break;
                   case 2:
                     setStartIndex(25)
+                    setsectorRange("26 - 50")
+                    setsectorNumber(2)
                     break;
                   case 3:
                     setStartIndex(50)
+                    setsectorRange("51 - 75")
+                    setsectorNumber(3)
                     break;
                   case 4:
                     setStartIndex(75)
+                    setsectorRange("76 - 100")
+                    setsectorNumber(4)
                     break;
                   case 5:
                     setStartIndex(100)
+                    setsectorRange("101 - 125")
+                    setsectorNumber(5)
                     break;
                   case 6:
                     setStartIndex(125)
+                    setsectorRange("126 - 150")
+                    setsectorNumber(6)
                     break;
                   case 7:
                     setStartIndex(150)
+                    setsectorRange("151 - 175")
+                    setsectorNumber(7)
                   break;
                   case 8:
                     setStartIndex(175)
+                    setsectorRange("176 - 200")
+                    setsectorNumber(8)
                   break;
                   case 9:
                     setStartIndex(200)
+                    setsectorRange("201 - 225")
+                    setsectorNumber(9)
                   break;
                   case 10:
                     setStartIndex(225)
+                    setsectorRange("226 - 250")
+                    setsectorNumber(10)
                   break;
                   case 11:
                     setStartIndex(250)
+                    setsectorRange("251 - 275")
+                    setsectorNumber(11)
                   break;
                   case 12:
                     setStartIndex(275)
+                    setsectorRange("276 - 300")
+                    setsectorNumber(12)
                   break;
                   case 13:
                     setStartIndex(300)
+                    setsectorRange("301 - 325")
+                    setsectorNumber(13)
                   break;
                   case 14:
                     setStartIndex(350)
+                    setsectorRange("326 - 350")
+                    setsectorNumber(14)
+
                   break;
                   case 15:
                     setStartIndex(375)
+                    setsectorRange("351 - 375")
+                    setsectorNumber(15)
                   break;
                   case 16:
                     setStartIndex(400)
+                    setsectorRange("376 - 400")
+                    setsectorNumber(16)
                   break;
                   case 17:
                     setStartIndex(425)
+                    setsectorRange("401 - 425")
+                    setsectorNumber(17)
                   break;
                   case 18:
                     setStartIndex(450)
+                    setsectorRange("426 - 450")
+                    setsectorNumber(18)
                   break;
                   case 19:
                     setStartIndex(475)
+                    setsectorRange("451 - 475")
+                    setsectorNumber(19)
                   break;
                   case 20:
                     setStartIndex(500)
+                    setsectorRange("476 - 500")
+                    setsectorNumber(20)
                   break;
                   case 21:
                     setStartIndex(525)
+                    setsectorRange("501 - 525")
+                    setsectorNumber(21)
                   break;
                   case 22:
                     setStartIndex(550)
+                    setsectorRange("526 - 550")
+                    setsectorNumber(22)
                   break;
                   case 23:
                     setStartIndex(575)
+                    setsectorRange("551 - 575")
+                    setsectorNumber(23)
                   break;
                     default:
                       setStartIndex(0)
@@ -852,7 +872,8 @@ else if(sliderorsearch === "slider") {
               {number}
               </span>         
               ))}
-              </div>
+        </div>
+        </>
         }
 
 

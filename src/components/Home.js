@@ -79,7 +79,7 @@ export function Home(){
 
     const [sliderorSearch, setsliderorSearch] = useState("search");
 
-    const [numeroObras, setnumeroObras ] = useState(1228)
+    const [numeroObras, setnumeroObras ] = useState(0)
 
     const [numeroObrasFilt, setnumeroObrasFilt ] = useState(0)
 
