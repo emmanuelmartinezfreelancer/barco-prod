@@ -20,6 +20,19 @@ const [obrasVisualizacion, setobrasVisualizacion] = useState([]);
 
  //console.log("Obras desde componente <Obras>", obrasVisualizacion);
 
+ const [startIndex, setStartIndex] = useState(0);
+
+ const handleNext = () => {
+  setStartIndex(startIndex + 10);
+
+};
+
+const handlePrev = () => {
+  setStartIndex(startIndex - 10);
+
+};
+
+
  const getArtworks = async () => {
 
   let arrayFinal = [];
@@ -143,7 +156,7 @@ const getFileType = async (obra) => {
   
 }
 
-const arrayArtworks = obras.map((artista)=>{
+const arrayArtworksAll = obras.map((artista)=>{
 
   //console.log("Artista from arrayArtworks <Obras/>", artista);
 
@@ -155,6 +168,8 @@ const arrayArtworks = obras.map((artista)=>{
       console.log("Artista from arrayArtworks <Obras/>", artista.artistname, "No tiene obras")
 
   }
+
+
 
 
  
@@ -173,10 +188,24 @@ const arrayArtworks = obras.map((artista)=>{
 })
 //.flat()
 
+ let artworksSlice = arrayArtworksAll.slice(startIndex, startIndex + 10);
 
-const [obrasFiltradas, setObrasFiltradas] = useState(arrayArtworks);
+let arrayArtworks = arrayArtworksAll;
 
-console.log("obrasFiltradas <Obras/>", obrasFiltradas)
+console.log("artworksSlice", artworksSlice)
+
+useEffect(()=>{
+
+  //setArtworksSlice(arrayArtworksAll.slice(startIndex, startIndex + 10))
+  
+
+},[startIndex])
+
+
+
+const [obrasFiltradas, setObrasFiltradas] = useState(arrayArtworksAll);
+
+//console.log("obrasFiltradas <Obras/>", obrasFiltradas)
 
 const filterArtworksBySearch = () => {
 
@@ -303,7 +332,7 @@ const filterArtworksBySearch = () => {
 
 //console.log("filterArtworks <Obras/> useEffect", obrasFiltradas)
 
-let obrasFiltroMain = filterArtworksBySearch();
+/* let obrasFiltroMain = filterArtworksBySearch();
 
 useEffect(() => {
 
@@ -311,19 +340,9 @@ useEffect(() => {
 
   setObrasFiltradas(obrasFiltroMain)
 
-}, [obrasFiltroMain.length])
+}, [obrasFiltroMain.length]) */
 
 
-
-const finalArtworksFiltered = arrayArtworks.filter((obra)=>{
-
-  if (obra !== "\"\""){
-
-    return obra
-
-  }
-
-})
 
 //console.log("slideorsearch <Home>", sliderorsearch)
 
@@ -391,16 +410,29 @@ else if(sliderorsearch === "slider") {
   console.log("Search Text <Obras/>", searchtext); */
 
   return (   
-            <> 
+    <> 
+
+        {
+        startIndex > 0 &&
+        (
+        <button 
+        className="text-4xl w-[40px] text-white bg-black shadow-black shadow-xl bg-opacity-100 fixed h-full left-0 top-0"
+        onClick={handlePrev}
+        >
+        {"<"}
+        </button>
+        )
+        }
             
         { iscurator ? 
 
-            obrasFiltradas &&
-
-            obrasFiltradas.map((artista) =>{
+            artworksSlice && artworksSlice.map((artista) =>{
 
               return(
               <>
+
+
+
               {
                 searchtext === '' && artista ?
                   (
@@ -411,6 +443,7 @@ else if(sliderorsearch === "slider") {
                     return (
 
                       <>
+                      
                       <div className="shadow overflow-hidden md:w-[50px] tablet:w-[410px] h-full bg-cover bg-center"
                       style={{ 
                         backgroundImage: `url("${ obra.imgurl }")` 
@@ -457,21 +490,15 @@ else if(sliderorsearch === "slider") {
   
                           </div>
                           }
-                      </div>
-  
-                      
+                      </div>                     
   
                       </>
-
-
-
-
 
                     )
 
 
                    })
-
+                
                    :
 
                    <p>Loading profile...</p>
@@ -545,6 +572,8 @@ else if(sliderorsearch === "slider") {
                 <p>Loading profile...</p>
   
               }
+
+              <p className="text-white text-xl px-2" >|</p>
               </>
   
               )
@@ -552,8 +581,11 @@ else if(sliderorsearch === "slider") {
             }) 
 
                 :
+                
 
-                obrasVisualizacion.map((obra) =>{
+                obrasVisualizacion.map((obra) => {
+
+
 
                   if(obra.isimage){
 
@@ -663,11 +695,29 @@ else if(sliderorsearch === "slider") {
                 
                       </>)
   
-                    }
+                  }
+
+                  startIndex + 5 < obras.length && (
+                    <button 
+                    className="text-4xl w-[40px] text-white bg-black shadow-black shadow-xl bg-opacity-100"
+                    onClick={handleNext}
+                    >
+                    {">"}
+                    </button>
+                  )
                 
                })
 
               }
+              
+              {startIndex + 10 < obras.length && (
+              <button 
+              className="text-4xl w-[40px] text-white bg-black shadow-black shadow-xl bg-opacity-100 fixed h-full right-0 top-0"
+              onClick={handleNext}
+              >
+              {">"}
+              </button>
+              )}
 
               </>
         )

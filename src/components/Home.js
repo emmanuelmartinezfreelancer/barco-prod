@@ -83,6 +83,8 @@ export function Home(){
 
     const [numeroObrasFilt, setnumeroObrasFilt ] = useState(0)
 
+    
+
     let folioNumber;
     let folioUpdate;
 
@@ -350,6 +352,10 @@ export function Home(){
       })
     }
 
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [modalImage,setmodalImage] = useState(false);
+
+
     const handleSlider = (e)=>{
 
       setScoreSearch(e.target.value)
@@ -475,10 +481,10 @@ export function Home(){
 
           { curatorview ?
           <>
-          <h1 class="text-lg pb-2 font-bold">Order by score</h1>
-
-{/*           <CustomSlider onClick={()=>{setsliderorSearch("slider")}} onChange={ handleSlider } min={0.00} max={10.00} defaultValue={ 0 } aria-label="Controlled slider" valueLabelDisplay="auto" />
- */}            
+          <h1 class="text-lg pb-2 font-bold">Order by score soon...</h1>
+{/* 
+          <CustomSlider onClick={()=>{setsliderorSearch("slider")}} onChange={ handleSlider } min={0.00} max={10.00} defaultValue={ 0 } aria-label="Controlled slider" valueLabelDisplay="auto" />
+          
                           <hr style={{
             backgroundColor: "#33E0D0",
             height: 1,
@@ -498,11 +504,9 @@ export function Home(){
                 <p onClick={()=>{setsliderorSearch("slider"); setScoreSearch(9)}} className="text-teal-400 font-bold cursor-pointer hover:text-gray-400">9</p>
                 <p onClick={()=>{setsliderorSearch("slider"); setScoreSearch(10)}} className="text-teal-400 font-bold cursor-pointer hover:text-gray-400">10</p>
 
-
-
             </div>
             
-          <h3 className="mt-6 text-xl"><span className="font-bold">Selected score {" "}</span> { scoreSearch }</h3>
+          <h3 className="mt-6 text-xl"><span className="font-bold">Selected score {" "}</span> { scoreSearch }</h3> */}
 
           </>
           :
