@@ -78,7 +78,7 @@ export function Login() {
       </div>
           
 
-      <div className="bg-black sm:w-full md:w-2/5 grid h-screen place-items-center">
+{/*       <div className="bg-black sm:w-full md:w-2/5 grid h-screen place-items-center">
       
       <form
         onSubmit={handleSubmit}
@@ -137,7 +137,7 @@ export function Login() {
       </form>
 
 
-        </div> 
+        </div>  */}
 
         </div>
     
