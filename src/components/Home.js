@@ -77,7 +77,7 @@ export function Home(){
 
     const [scoreSearch, setScoreSearch] = useState(0);
 
-    const [sliderorSearch, setsliderorSearch] = useState("search");
+    const [sliderorSearch, setsliderorSearch] = useState("");
 
     const [numeroObras, setnumeroObras ] = useState(0)
 
@@ -410,14 +410,16 @@ export function Home(){
       }  */}
 
 
-{/*       {curatorview &&
-              <div className="flex flex-row fixed w-full h-[30px] mt-16 z-50 ">
+    {curatorview &&
+              <div className="flex flex-col fixed w-full h-[30px] mt-16 z-50 ">
 
-              <input onClick={()=>{setsliderorSearch("search")}} onChange={(e)=>{ setSearch(e.target.value); console.log("Search input", e.target.value)}} type="text" className="ml-auto rounded-xl border-teal-400 border-2 w-1/2 mr-8 text-right pr-8 bg-transparent" placeHolder="Search by artwork title..." />
-             
+              <input onClick={()=>{setsliderorSearch("search")}} onChange={(e)=>{ setSearch(e.target.value);}} type="text" className="ml-auto rounded-xl border-teal-400 border-2 w-1/2 mr-8 text-right pr-8 bg-transparent" placeHolder="Search by artist name or artwork title..." />
+              { sliderorSearch === "search" &&
+              <p onClick={()=>{setsliderorSearch(""); setScoreSearch(0)}} className="ml-auto text-teal-400  cursor-pointer hover:text-gray-400 pr-12 pt-2">Return to main view</p>
+              }
            </div>
-      } */}
-    
+      }
+
     <div className="flex sm:flex-col md:flex-row md:flex-nowrap tablet:pt-3 lg:pt-12 w-full">
 
 
@@ -481,7 +483,6 @@ export function Home(){
 
           { curatorview ?
           <>
-          <h1 class="text-lg pb-2 font-bold">Order by score soon...</h1>
 {/* 
           <CustomSlider onClick={()=>{setsliderorSearch("slider")}} onChange={ handleSlider } min={0.00} max={10.00} defaultValue={ 0 } aria-label="Controlled slider" valueLabelDisplay="auto" />
           
@@ -489,24 +490,25 @@ export function Home(){
             backgroundColor: "#33E0D0",
             height: 1,
             borderStyle: "none"
-          }} />
+          }} /> */}
 
-                <div className="flex flex-row flex-wrap gap-3 justify-center w-full align-center pt-2">
-                <p onClick={()=>{setsliderorSearch("slider"); setScoreSearch(0)}} className="text-teal-400 font-bold cursor-pointer hover:text-gray-400">0</p>
-                <p onClick={()=>{setsliderorSearch("slider"); setScoreSearch(1)}} className="text-teal-400 font-bold cursor-pointer hover:text-gray-400">1</p>
-                <p onClick={()=>{setsliderorSearch("slider"); setScoreSearch(2)}} className="text-teal-400 font-bold cursor-pointer hover:text-gray-400">2</p>
-                <p onClick={()=>{setsliderorSearch("slider"); setScoreSearch(3)}} className="text-teal-400 font-bold cursor-pointer hover:text-gray-400">3</p>
-                <p onClick={()=>{setsliderorSearch("slider"); setScoreSearch(4)}} className="text-teal-400 font-bold cursor-pointer hover:text-gray-400">4</p>
-                <p onClick={()=>{setsliderorSearch("slider"); setScoreSearch(5)}} className="text-teal-400 font-bold cursor-pointer hover:text-gray-400">5</p>
-                <p onClick={()=>{setsliderorSearch("slider"); setScoreSearch(6)}} className="text-teal-400 font-bold cursor-pointer hover:text-gray-400">6</p>
-                <p onClick={()=>{setsliderorSearch("slider"); setScoreSearch(7)}} className="text-teal-400 font-bold cursor-pointer hover:text-gray-400">7</p>
-                <p onClick={()=>{setsliderorSearch("slider"); setScoreSearch(8)}} className="text-teal-400 font-bold cursor-pointer hover:text-gray-400">8</p>
-                <p onClick={()=>{setsliderorSearch("slider"); setScoreSearch(9)}} className="text-teal-400 font-bold cursor-pointer hover:text-gray-400">9</p>
-                <p onClick={()=>{setsliderorSearch("slider"); setScoreSearch(10)}} className="text-teal-400 font-bold cursor-pointer hover:text-gray-400">10</p>
-
-            </div>
+          <div className="flex flex-row flex-wrap gap-3 justify-center w-full align-center pt-2">
+            <p onClick={()=>{setsliderorSearch(""); setScoreSearch(0)}} className="text-teal-400 font-bold cursor-pointer hover:text-gray-400">0</p>
+            <p onClick={()=>{setsliderorSearch("slider"); setScoreSearch(1)}} className="text-teal-400 font-bold cursor-pointer hover:text-gray-400">1</p>
+            <p onClick={()=>{setsliderorSearch("slider"); setScoreSearch(2)}} className="text-teal-400 font-bold cursor-pointer hover:text-gray-400">2</p>
+            <p onClick={()=>{setsliderorSearch("slider"); setScoreSearch(3)}} className="text-teal-400 font-bold cursor-pointer hover:text-gray-400">3</p>
+            <p onClick={()=>{setsliderorSearch("slider"); setScoreSearch(4)}} className="text-teal-400 font-bold cursor-pointer hover:text-gray-400">4</p>
+            <p onClick={()=>{setsliderorSearch("slider"); setScoreSearch(5)}} className="text-teal-400 font-bold cursor-pointer hover:text-gray-400">5</p>
+            <p onClick={()=>{setsliderorSearch("slider"); setScoreSearch(6)}} className="text-teal-400 font-bold cursor-pointer hover:text-gray-400">6</p>
+            <p onClick={()=>{setsliderorSearch("slider"); setScoreSearch(7)}} className="text-teal-400 font-bold cursor-pointer hover:text-gray-400">7</p>
+            <p onClick={()=>{setsliderorSearch("slider"); setScoreSearch(8)}} className="text-teal-400 font-bold cursor-pointer hover:text-gray-400">8</p>
+            <p onClick={()=>{setsliderorSearch("slider"); setScoreSearch(9)}} className="text-teal-400 font-bold cursor-pointer hover:text-gray-400">9</p>
+            <p onClick={()=>{setsliderorSearch("slider"); setScoreSearch(10)}} className="text-teal-400 font-bold cursor-pointer hover:text-gray-400">10</p>
+          </div>
             
-          <h3 className="mt-6 text-xl"><span className="font-bold">Selected score {" "}</span> { scoreSearch }</h3> */}
+          <h3 className="mt-6 text-xl"><span className="font-bold">Selected score {" "}</span> { scoreSearch }</h3> 
+
+
 
           </>
           :
@@ -597,7 +599,7 @@ export function Home(){
               
             curatorview ?  
             
-              ( userDoc ? <div className="flex flex-row flex-nowrap absolute bottom-0 h-full w-fit pb-20 pt-44 gap-x-4"><Obras obras={ totalArtworks } artistname={ artistName } email={ email } iscurator={ true } searchtext={search} scoresearch={ scoreSearch } sliderorsearch={ sliderorSearch } setnumeroObras = { setnumeroObras } setnumeroObrasFilt={ setnumeroObrasFilt } /> </div>: null )
+              ( userDoc ? <div className="flex flex-row flex-nowrap absolute bottom-0 h-full w-fit pb-20 pt-44 gap-x-4"><Obras obras={ totalArtworks } artistname={ artistName } email={ email } iscurator={ true } searchtext={search} scoresearch={ scoreSearch } sliderorsearch={ sliderorSearch } setnumeroObras = { setnumeroObras } setnumeroObrasFilt={ setnumeroObrasFilt } numerobras= { numeroObras }/> </div>: null )
               
             :
 

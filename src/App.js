@@ -22,9 +22,9 @@ function App() {
           <Route
             path="/"
             element={
-              <ProtectedRouteAdmin>
+              <ProtectedRoute>
                 <Home />
-              </ProtectedRouteAdmin>
+              </ProtectedRoute>
             }
           />
        <Route path="/register" element={<Register />} />
