@@ -159,7 +159,7 @@ export function Home(){
     const getArray = async(userMail)=>{
       
 
-      if(userMail === iscurator[0].email || userMail === iscurator[1].email || userMail === iscurator[2].email || userMail === iscurator[3].email || userMail === iscurator[4].email){
+      if(userMail === iscurator[0].email || userMail === iscurator[1].email || userMail === iscurator[3].email || userMail === iscurator[4].email){
         
         setTotalArtworks(await searchAllUsers())
 
