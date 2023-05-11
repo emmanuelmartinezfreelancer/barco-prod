@@ -2,7 +2,7 @@ import {React, useState, useEffect} from "react";
 import { useAuth } from "../context/authContext"
 import { ReactComponent as Logo } from '../assets/logoBarcoHome.svg';
 import { Link, useNavigate } from "react-router-dom";
-import Obras from './Obras.js'
+import ObrasAdmin from './ObrasAdmin.js'
 import UploadArtwork from "./UploadArtwork";
 import { app } from '../firebase'
 import { getFirestore, doc, getDoc, setDoc,getDocs, collection } from "firebase/firestore"
@@ -39,7 +39,7 @@ const CustomSlider = styled(Slider)(({ theme }) => ({
 }));
 
 
-export function Home(){
+export function HomeAdmin(){
 
     const { user, logout, loading } = useAuth();
 
@@ -157,10 +157,9 @@ export function Home(){
 
 
     const getArray = async(userMail)=>{
-      
 
       if(userMail === iscurator[0].email || userMail === iscurator[1].email || userMail === iscurator[2].email || userMail === iscurator[3].email || userMail === iscurator[4].email){
-        
+  
         setTotalArtworks(await searchAllUsers())
 
         let arrayAllUsers = await searchAllUsers();
@@ -434,7 +433,7 @@ export function Home(){
           <div className="md:mt-20 lg:mt-24">
           <h1 class="sm:w-full sm:text-2xl md:text-3xl tablet:text-4xl lg:text-5xl font-bold tablet:pb-2 lg:pb-8 text-center md:text-left">Hola <br className="sm:hidden md:block"/>{ artistName }</h1>
           {folio ? <p className="text-xl text-center md:text-left sm:pb-4 md:pb-2" >Folio <span className="font-bold">{ folio }</span></p> : null }
-          <h1 className="sm:pb-4 md:pb-2 pt-4 text-center md:text-left text-teal-400 sm:text-lg tablet:text-xl md:tracking-[.27em] tablet:tracking-[.25em]">DASHBOARD</h1>
+          <h1 className="sm:pb-4 md:pb-2 pt-4 text-center md:text-left text-teal-400 sm:text-lg tablet:text-xl md:tracking-[.27em] tablet:tracking-[.25em]">DASHBOARD ADMIN</h1>
           
           
           <hr style={{
@@ -600,11 +599,11 @@ export function Home(){
               
             curatorview ?  
             
-              ( userDoc ? <div className="flex flex-row flex-nowrap absolute bottom-0 h-full w-fit pb-20 pt-44 gap-x-4"><Obras obras={ totalArtworks } artistname={ artistName } email={ email } iscurator={ true } searchtext={search} scoresearch={ scoreSearch } sliderorsearch={ sliderorSearch } setnumeroObras = { setnumeroObras } setnumeroObrasFilt={ setnumeroObrasFilt } numerobras= { numeroObras }/> </div>: null )
+              ( userDoc ? <div className="flex flex-row flex-nowrap absolute bottom-0 h-full w-fit pb-20 pt-44 gap-x-4"><ObrasAdmin obras={ totalArtworks } artistname={ artistName } email={ email } iscurator={ true } searchtext={search} scoresearch={ scoreSearch } sliderorsearch={ sliderorSearch } setnumeroObras = { setnumeroObras } setnumeroObrasFilt={ setnumeroObrasFilt } numerobras= { numeroObras }/> </div>: null )
               
             :
 
-              (userDoc ? <div className="grid sm:grid-rows-2 md:grid-rows-1 sm:grid-cols md:grid-cols-3 gap-6 sm:h-[1600px] md:h-full sm:w-full md:w-screen sm:pb-10 md:pb-10 lg:pb-20 px-auto"><Obras obras={ arrayArtworks  } artistex= { artistex } artistname={ artistName } email={ email } cvURL={cvurl} semblanceURL={ semblanceurl } projectURL={ projecturl } iscurator={ false } setnumeroObras = { setnumeroObras } setnumeroObrasFilt={ setnumeroObrasFilt } /> </div> : null )
+              (userDoc ? <div className="grid sm:grid-rows-2 md:grid-rows-1 sm:grid-cols md:grid-cols-3 gap-6 sm:h-[1600px] md:h-full sm:w-full md:w-screen sm:pb-10 md:pb-10 lg:pb-20 px-auto"><ObrasAdmin obras={ arrayArtworks  } artistex= { artistex } artistname={ artistName } email={ email } cvURL={cvurl} semblanceURL={ semblanceurl } projectURL={ projecturl } iscurator={ false } setnumeroObras = { setnumeroObras } setnumeroObrasFilt={ setnumeroObrasFilt } /> </div> : null )
 
 
             }

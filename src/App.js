@@ -7,7 +7,7 @@ import { Profile } from "./components/Profile"
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { ProtectedRouteAdmin } from "./components/ProtectedRouteAdmin";
 import { AuthProvider } from "./context/authContext";
-import { HomeJuez } from "./components/HomeJuez";
+import { HomeAdmin } from "./components/HomeAdmin";
 import { NewUploadArtwork } from "./components/NewUploadArtwork"; 
 import { SendMail } from "./components/SendMail";
 import { LoginAdmin } from "./components/LoginAdmin";
@@ -35,10 +35,10 @@ function App() {
               </ProtectedRoute>
 
           }/>
-          <Route path="/home-juez" element={
-              <ProtectedRoute>
-                  <HomeJuez />
-              </ProtectedRoute>
+          <Route path="/home-admin" element={
+              <ProtectedRouteAdmin>
+                  <HomeAdmin />
+              </ProtectedRouteAdmin>
 
           }/>
           <Route path="/send-mail" element={

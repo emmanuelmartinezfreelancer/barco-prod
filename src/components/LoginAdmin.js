@@ -18,7 +18,16 @@ export function LoginAdmin() {
     setError("");
     try {
       await login(user.email, user.password);
-      navigate("/");
+
+      if(user.email === "oscarascencioc@hotmail.com"){
+
+        navigate("/home-admin");
+
+      } else{
+
+        navigate("/");
+      }
+      
     } catch (error) {
         if (error.code === "auth/internal-error"){
                 
