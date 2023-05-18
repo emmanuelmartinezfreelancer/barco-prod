@@ -11,6 +11,7 @@ import { HomeAdmin } from "./components/HomeAdmin";
 import { NewUploadArtwork } from "./components/NewUploadArtwork"; 
 import { SendMail } from "./components/SendMail";
 import { LoginAdmin } from "./components/LoginAdmin";
+import { Numeralia } from "./components/Numeralia";
 
 function App() {
   return (
@@ -46,6 +47,12 @@ function App() {
                   <SendMail />
               </ProtectedRouteAdmin>
 
+          }
+          />
+          <Route path="/numeralia" element={
+              <ProtectedRouteAdmin>
+                  <Numeralia />
+              </ProtectedRouteAdmin>
           }
           />
         </Routes>
